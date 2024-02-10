@@ -6,13 +6,11 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 //import 'package:hive/hive.dart';
 //import 'package:rabbit_clipboard/controllers/controllers.dart';
 
-
 import 'file_services.dart';
 //import 'package:rabbit_clipboard/main.dart';
 //import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
-import 'package:rabbit_clipboard/common/config.dart';
-import 'package:rabbit_clipboard/common/global_variable.dart';
+import 'package:rabbit_clipboard/common/globalVariable.dart';
 import 'package:rabbit_clipboard/common/func.dart';
 
 class Sender{
@@ -30,54 +28,54 @@ class Sender{
 
       } else if(Platform.isAndroid){
         List<SharedMediaFile> sharedMediaFiles = await ReceiveSharingIntent.getInitialMedia();
-        fileList = transformList(sharedMediaFiles.map((e) => e.path).toList());
+        GlobalVariables.fileList = transformList(sharedMediaFiles.map((e) => e.path).toList());
       }
     } else {
       //主动选择
       if(Platform.isAndroid){
-        fileList  = transformList(await FileMethods.pickFiles());
+        GlobalVariables.fileList  = transformList(await FileMethods.pickFiles());
         //log(fileList,StackTrace.current);
-        for(int i = 0; i < fileList.length; i++){
+        for(int i = 0; i < GlobalVariables.fileList.length; i++){
           //第一种方式 使用 uri_to_file 插件试图转换成 /data/data 开头的内部链接 但是会将文件复制一份放到 "/data/data/0/包名" 的内部空间中 如果文件很大造成空间浪费而且复制会特别耗时
           //fileList![i] = (await toFile(fileList![i]!)).path;
           //print(fileList![i]);
 
           //第二种方式 使用 Android Api 转译地址来访问文件
-          String? decodeContentUri = Uri.decodeComponent(fileList[i]["contentUri"]!);
+          String? decodeContentUri = Uri.decodeComponent(GlobalVariables.fileList[i]["contentUri"]!);
           const platform = MethodChannel("AndroidApi");
           String originFilePath = await platform.invokeMethod("getOriginFilePathByUri",[decodeContentUri]);
-          fileList[i]["originUri"] = originFilePath;
+          GlobalVariables.fileList[i]["originUri"] = originFilePath;
           if(originFilePath.startsWith("/storage/")){
-            fileList[i]["storageUri"] = originFilePath;
+            GlobalVariables.fileList[i]["storageUri"] = originFilePath;
           } else if(originFilePath.startsWith("/data/")){
-            fileList[i]["privateUri"] = originFilePath;
+            GlobalVariables.fileList[i]["privateUri"] = originFilePath;
           } else {
             throw Exception("无法转换File Uri");
           }
           //获取文件基本信息
-          fileList[i]["baseName"] = getFileInfo(originFilePath)["baseName"]!;
-          fileList[i]["fileName"] = getFileInfo(originFilePath)["fileName"]!;
-          fileList[i]["shortFileName"] = getFileInfo(originFilePath)["shortFileName"]!;
-          fileList[i]["extension"] = getFileInfo(originFilePath)["extension"]!;
-          fileList[i]["fileSize"] = getFileInfo(originFilePath)["fileSize"]!;
+          GlobalVariables.fileList[i]["baseName"] = getFileInfo(originFilePath)["baseName"]!;
+          GlobalVariables.fileList[i]["fileName"] = getFileInfo(originFilePath)["fileName"]!;
+          GlobalVariables.fileList[i]["shortFileName"] = getFileInfo(originFilePath)["shortFileName"]!;
+          GlobalVariables.fileList[i]["extension"] = getFileInfo(originFilePath)["extension"]!;
+          GlobalVariables.fileList[i]["fileSize"] = getFileInfo(originFilePath)["fileSize"]!;
         }
       } else{
         //iOS、Windows and so on
-        fileList  = transformList(await FileMethods.pickFiles());
-        for(int i = 0 ;i < fileList.length; i++){
+        GlobalVariables.fileList  = transformList(await FileMethods.pickFiles());
+        for(int i = 0 ;i < GlobalVariables.fileList.length; i++){
           //获取文件基本信息
-          fileList[i]['originUri'] = fileList[i]['contentUri']!;
-          Map fileInfo = getFileInfo(fileList[i]['originUri']!);
-          fileList[i]["baseName"] = fileInfo["baseName"]!;
-          fileList[i]["fileName"] = fileInfo["fileName"]!;
-          fileList[i]["shortFileName"] = fileInfo["shortFileName"]!;
-          fileList[i]["extension"] = fileInfo["extension"]!;
-          fileList[i]["fileSize"] = fileInfo["fileSize"]!;
+          GlobalVariables.fileList[i]['originUri'] = GlobalVariables.fileList[i]['contentUri']!;
+          Map fileInfo = getFileInfo(GlobalVariables.fileList[i]['originUri']!);
+          GlobalVariables.fileList[i]["baseName"] = fileInfo["baseName"]!;
+          GlobalVariables.fileList[i]["fileName"] = fileInfo["fileName"]!;
+          GlobalVariables.fileList[i]["shortFileName"] = fileInfo["shortFileName"]!;
+          GlobalVariables.fileList[i]["extension"] = fileInfo["extension"]!;
+          GlobalVariables.fileList[i]["fileSize"] = fileInfo["fileSize"]!;
         }
       }
     }
   
-    log(fileList,StackTrace.current);
-    return fileList;
+    log(GlobalVariables.fileList,StackTrace.current);
+    return GlobalVariables.fileList;
   }
 }

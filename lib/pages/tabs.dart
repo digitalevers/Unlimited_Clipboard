@@ -7,9 +7,8 @@ import 'tabs/sync_history.dart';
 
 import 'package:rabbit_clipboard/pages/modules/privacy_page.dart';
 import 'package:rabbit_clipboard/services/client.dart';
-import 'package:rabbit_clipboard/common/config.dart';
 import 'package:rabbit_clipboard/common/func.dart';
-import 'package:rabbit_clipboard/common/global_variable.dart';
+import 'package:rabbit_clipboard/common/globalVariable.dart';
 //import 'package:showcaseview/showcaseview.dart';
 
 class Tabs extends StatefulWidget {
@@ -26,8 +25,6 @@ class Tabs extends StatefulWidget {
 class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
   //默认显示的tab index
   int _currentIndex = 0;
-  // ignore: non_constant_identifier_names
-  Icon _FloatingActionButtonIcon = const Icon(Icons.add, color: Colors.white);
   List<Map<String, String>> chooseFiles = [];
   String showShortFileName = '';
   final List<Widget> _pages = [
@@ -35,11 +32,9 @@ class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
     const SyncHistory(),
   ];
 
-
   //新手引导蒙层
-  final GlobalKey _one = GlobalKey();
-
-  late BuildContext myContext;
+  //final GlobalKey _one = GlobalKey();
+  //late BuildContext myContext;
 
   @override
   void initState() {
@@ -60,7 +55,7 @@ class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    bool allowPrivacy = prefs?.getBool("allowPrivacy") ?? false;
+    bool allowPrivacy = GlobalVariables.prefs?.getBool("allowPrivacy") ?? false;
     if (allowPrivacy) {
       //置于initState中只会执行一次
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -76,15 +71,7 @@ class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
           type: BottomNavigationBarType.fixed,
           onTap: (index) {
             setState(() {
-              if (index == 2) {
-                if (chooseFiles.isNotEmpty) {
-                  chooseFiles.clear();
-                  _FloatingActionButtonIcon =
-                      const Icon(Icons.add, color: Colors.white);
-                }
-              } else {
-                _currentIndex = index;
-              }
+              _currentIndex = index;
             });
           },
           items: const <BottomNavigationBarItem>[
@@ -93,7 +80,7 @@ class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
           ],
         ),
         //新手引导蒙层只在app安装时提示一次
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        //floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       );
     } else {
       return const PrivacyPage();

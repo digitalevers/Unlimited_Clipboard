@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:rabbit_clipboard/common/global_variable.dart';
+import 'package:rabbit_clipboard/common/globalVariable.dart';
 // Import for Android features.
 //import 'package:webview_flutter_android/webview_flutter_android.dart';
 // Import for iOS features.
@@ -125,11 +125,10 @@ class _PrivacyPageState extends State<PrivacyPage> {
                                 color: Theme.of(context).primaryColor,
                                 child: const Text('同意',style:TextStyle(color: Colors.white))),
                             onTap: () async {
-                              await prefs?.setBool("allowPrivacy",true);
+                              await GlobalVariables.prefs?.setBool("allowPrivacy",true);
                               //关闭弹窗
-                              // ignore: use_build_context_synchronously
                               Navigator.pop(context);
-                              TabsKey.currentState!.setState(() {});
+                              //TabsKey.currentState!.setState(() {});
                             },
                           )),
                         ],

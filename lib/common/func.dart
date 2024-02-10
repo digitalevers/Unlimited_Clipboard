@@ -4,14 +4,13 @@ import 'dart:io';
 import 'dart:math';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
-
+import 'package:rabbit_clipboard/common/customIcons.dart';
 
 import 'commclass.dart';
-import 'config.dart';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'global_variable.dart';
+import 'globalVariable.dart';
 import 'package:bot_toast/bot_toast.dart';
 
 
@@ -21,15 +20,12 @@ import 'package:bot_toast/bot_toast.dart';
  */
 void log(var msg, [StackTrace? st]) {
   st ??= StackTrace.current;
-  if (debug) {
+  if (GlobalVariables.logDebug){
     CustomPrint customPrint = CustomPrint(st);
       // ignore: avoid_print
     print("打印信息:$msg, 所在文件:${customPrint.fileName},所在行:${customPrint.lineNumber}");
   }
 }
-
-
-
 
 //返回min-max之间的整数
 int randomInt(int min, int max) {
@@ -113,7 +109,7 @@ Future<void> sendFileInfo(HttpClient client_, String serverIP_, int serverPort_,
   String url      = "http://$serverIP_:$serverPort_/fileinfo";
   String formBody = "fileSize=$fileSize&fileCount=$fileCount";
 
-  HttpClientRequest request = await  client.postUrl(Uri.parse(url));
+  HttpClientRequest request = await GlobalVariables.client.postUrl(Uri.parse(url));
   request.add(utf8.encode(formBody));
   HttpClientResponse response = await request.close();
   String result = await response.transform(utf8.decoder).join();
@@ -134,7 +130,7 @@ Future<void> sendFileInfo(HttpClient client_, String serverIP_, int serverPort_,
         BotToast.showText(text:"无文件内容可发送");
       }
     } else {
-      BotToast.showText(text:"对方${HttpResponseCodeMsg[resMap['code']]!}");
+      BotToast.showText(text:"对方${GlobalVariables.httpResponseCodeMsg[resMap['code']]!}");
     }
   }
   //client.close();// 这里若关闭了 就不能再次发送请求了
@@ -155,8 +151,8 @@ Future<String> sendFile(HttpClient client_, String serverIP_, int serverPort_, M
     //上述现象其实是没有授权所有文件访问权限引起
     request.headers.set("baseName", Uri.encodeComponent(filelistItem["baseName"]!));
     request.headers.set("content-length", filelistItem["fileSize"]!);
-    request.headers.set("client-hostname", deviceInfo["model"]);
-    request.headers.set("client-lanip", deviceInfo["lanIP"]);
+    request.headers.set("client-hostname", GlobalVariables.deviceInfo["model"]!);
+    request.headers.set("client-lanip", GlobalVariables.deviceInfo["lanIP"]!);
 
     Stream<List<int>> fileStream = file.openRead();
     //已发送长度
@@ -164,7 +160,7 @@ Future<String> sendFile(HttpClient client_, String serverIP_, int serverPort_, M
     //待发送文件总长度
     int fileSize = int.parse(filelistItem["fileSize"]!);
     //发送进度
-    int currentSentProgress = remoteDevicesData[serverIP_]!["progress"] ?? 0;
+    int currentSentProgress = GlobalVariables.remoteDevicesData[serverIP_]!["progress"] ?? 0;
     //fileStream添加interceptor
     Stream<List<int>> sendStream = fileStream.transform(
       StreamTransformer.fromHandlers(
@@ -174,8 +170,8 @@ Future<String> sendFile(HttpClient client_, String serverIP_, int serverPort_, M
           //log(latestSentProgress,StackTrace.current);
           if(latestSentProgress != currentSentProgress){
               currentSentProgress = latestSentProgress;
-              remoteDevicesData[serverIP_]!["progress"] = latestSentProgress;
-              remoteDevicesData[serverIP_]!["remoteDeviceWidgetKey"].currentState.setState((){});
+              GlobalVariables.remoteDevicesData[serverIP_]!["progress"] = latestSentProgress;
+              GlobalVariables.remoteDevicesData[serverIP_]!["remoteDeviceWidgetKey"].currentState.setState((){});
           }
           //发送完毕提示
           if(latestSentProgress >= 100){
@@ -193,8 +189,8 @@ Future<String> sendFile(HttpClient client_, String serverIP_, int serverPort_, M
         },
         handleDone: (sink) {
           //文件发送完毕 重新初始化step indicator组件
-          remoteDevicesData[serverIP_]!["progress"] = 0;
-          remoteDevicesData[serverIP_]!["remoteDeviceWidgetKey"].currentState.setState((){});
+          GlobalVariables.remoteDevicesData[serverIP_]!["progress"] = 0;
+          GlobalVariables.remoteDevicesData[serverIP_]!["remoteDeviceWidgetKey"].currentState.setState((){});
           sink.close();
         },
       ),
@@ -267,6 +263,26 @@ ContentType getHeaderContentType(String extension){
   }
   return ct;
 }
+
+IconData getRemoteDeviceTypeIcon(String? deviceType) {
+  switch (deviceType) {
+    case 'linux':
+      return const Icon(CustomIcons.linux).icon!;
+    case 'macos':
+      return Icons.laptop_mac;
+    case 'windows':
+      return Icons.window_sharp;
+    case 'android':
+      return Icons.android;
+    case 'ios':
+      return Icons.phone_iphone;
+    case 'fuchsia':
+      return Icons.computer;
+    default:
+      return Icons.question_mark_sharp;
+  }
+}
+
 
 //获取下载目录
 //TODO iOS下载目录

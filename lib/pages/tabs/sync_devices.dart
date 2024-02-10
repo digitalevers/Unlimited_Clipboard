@@ -1,5 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:rabbit_clipboard/common/globalWidget.dart';
 
 class SyncDevices extends StatefulWidget {
   const SyncDevices({super.key});
@@ -11,7 +11,11 @@ class SyncDevices extends StatefulWidget {
 class _SyncDevicesState extends State<SyncDevices> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Column(
+      children: [
+        getHeaderWidget()
+      ],
+    );
   }
 }
 

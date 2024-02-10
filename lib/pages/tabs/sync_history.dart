@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rabbit_clipboard/common/globalWidget.dart';
 
 class SyncHistory extends StatefulWidget {
   const SyncHistory({super.key});
@@ -10,6 +11,10 @@ class SyncHistory extends StatefulWidget {
 class _SyncHistoryState extends State<SyncHistory> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Column(
+      children: [
+        getHeaderWidget()
+      ],
+    );
   }
 }

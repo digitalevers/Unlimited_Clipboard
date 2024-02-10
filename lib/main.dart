@@ -5,13 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:rabbit_clipboard/pages/modules/privacy_page.dart';
 import 'pages/tabs.dart';
 
-import 'common/config.dart';
 import 'common/func.dart';
-import 'common/global_variable.dart';
+import 'common/globalVariable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bot_toast/bot_toast.dart';
-
-
 
 // 重写HttpOverrides
 class MyHttpOverrides extends HttpOverrides {
@@ -19,21 +16,23 @@ class MyHttpOverrides extends HttpOverrides {
   HttpClient createHttpClient(SecurityContext? context) {
     var http = super.createHttpClient(context);
     http.findProxy = (uri) {
-      return 'PROXY $PROXY';    //设置代理必须使用局域网地址 localhost或127.0.0.1不行
+      return 'PROXY ${GlobalVariables.proxy}'; //设置代理必须使用局域网地址 localhost或127.0.0.1不行
     };
-    http.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    http.badCertificateCallback =
+        (X509Certificate cert, String host, int port) => true;
     return http;
   }
 }
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();  //这一行很重要且必须放在第一行 放在 SharedPreferences 前面 否则运行会报错 暂不知原因
-  prefs = await SharedPreferences.getInstance();
-  if(useProxy){
+  WidgetsFlutterBinding.ensureInitialized(); //这一行很重要且必须放在第一行 放在 SharedPreferences 前面 否则运行会报错 暂不知原因
+  GlobalVariables.prefs = await SharedPreferences.getInstance();
+  if (GlobalVariables.useProxy) {
     HttpOverrides.global = MyHttpOverrides(); // 使用自己的HttpOverrides
   }
   // 屏幕顶部状态栏设置为透明（沉浸式）
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: Colors.blue));
+  SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(statusBarColor: Colors.blue));
   runApp(const MyApp());
 }
 
@@ -45,13 +44,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     log("启动MyApp");
     return MaterialApp(
-      navigatorKey: nav,
+      navigatorKey: GlobalVariables.nav,
       title: '脱兔剪切板',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'A Crossplatform Clipboard Sync Tool',key: MyHomePageKey),
-      builder: BotToastInit(),  //bot_toast
+      home: MyHomePage(
+          title: 'A Crossplatform Clipboard Sync Tool',
+          key: GlobalVariables.myHomePageKey),
+      builder: BotToastInit(), //bot_toast
     );
   }
 }
@@ -64,10 +65,7 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage>{
-
-
-
+class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     log("启动Main页面");
@@ -77,6 +75,6 @@ class _MyHomePageState extends State<MyHomePage>{
     // } else {
     //   return const PrivacyPage();
     // }
-    return Tabs(key:TabsKey);
+    return Tabs(key: GlobalVariables.tabsKey);
   }
 }
