@@ -44,13 +44,6 @@ class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    //TODO 报 myContext not initial
-    // if(myContext != null){
-    //   log(1111,StackTrace.current);
-    //   WidgetsBinding.instance.addPostFrameCallback((_) =>
-    //     ShowCaseWidget.of(myContext).startShowCase([_one])
-    //   );
-    // }
   }
 
   @override
@@ -95,8 +88,8 @@ class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
             });
           },
           items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(icon: Icon(Icons.device_hub), label: "同步设备"),
-            BottomNavigationBarItem(icon: Icon(Icons.history), label: "同步历史"),
+            BottomNavigationBarItem(icon: Icon(Icons.devices), label: "同步设备"),
+            BottomNavigationBarItem(icon: Icon(Icons.list), label: "同步历史"),
           ],
         ),
         //新手引导蒙层只在app安装时提示一次
