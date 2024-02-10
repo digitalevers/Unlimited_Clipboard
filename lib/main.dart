@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 //import 'package:path_provider/path_provider.dart';
-import 'package:rabbit_clipboard/pages/modules/privacy_page.dart';
+import 'package:rabbit_clipboard/pages/modules/privacyPage.dart';
 import 'pages/tabs.dart';
 
 import 'common/func.dart';

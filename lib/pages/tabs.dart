@@ -2,10 +2,10 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'tabs/sync_devices.dart';
-import 'tabs/sync_history.dart';
+import 'tabs/syncDevices.dart';
+import 'tabs/syncHistory.dart';
 
-import 'package:rabbit_clipboard/pages/modules/privacy_page.dart';
+import 'package:rabbit_clipboard/pages/modules/privacyPage.dart';
 import 'package:rabbit_clipboard/services/client.dart';
 import 'package:rabbit_clipboard/common/func.dart';
 import 'package:rabbit_clipboard/common/globalVariable.dart';

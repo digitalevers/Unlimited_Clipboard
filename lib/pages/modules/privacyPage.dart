@@ -6,7 +6,7 @@ import 'package:rabbit_clipboard/common/globalVariable.dart';
 //import 'package:webview_flutter_android/webview_flutter_android.dart';
 // Import for iOS features.
 //import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
-import 'package:rabbit_clipboard/pages/modules/privacy_view.dart';
+import 'package:rabbit_clipboard/pages/modules/privacyView.dart';
 
 class PrivacyPage extends StatefulWidget {
 
@@ -17,7 +17,6 @@ class PrivacyPage extends StatefulWidget {
 }
 
 class _PrivacyPageState extends State<PrivacyPage> {
-
   
   final String _data = "亲爱的用户，感谢您信任并使用脱兔剪切板APP\n" +
       " \n" +
