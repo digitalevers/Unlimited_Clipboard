@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class SyncDevices extends StatefulWidget {
@@ -10,6 +11,7 @@ class SyncDevices extends StatefulWidget {
 class _SyncDevicesState extends State<SyncDevices> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Container();
   }
 }
+

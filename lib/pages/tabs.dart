@@ -34,13 +34,7 @@ class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
     const SyncDevices(),
     const SyncHistory(),
   ];
-  //首页雷达扫描动画
-  // ignore: prefer_typing_uninitialized_variables
-  SweepGradient? _indexSweepGradient;
-  ///////////////
 
-  /////动画控制器
-  AnimationController? _animationController;
 
   //新手引导蒙层
   final GlobalKey _one = GlobalKey();
@@ -50,13 +44,6 @@ class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    //创建
-    _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 2000));
-    //添加到事件队列中
-    Future.delayed(Duration.zero, () {
-      _animationController?.repeat();
-    });
     //TODO 报 myContext not initial
     // if(myContext != null){
     //   log(1111,StackTrace.current);
@@ -74,8 +61,6 @@ class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
-    //销毁
-    _animationController?.dispose();
     super.dispose();
     print('tabs-dispose');
   }
@@ -107,17 +92,6 @@ class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
               } else {
                 _currentIndex = index;
               }
-              //选中其他tab页 停止雷达扫描
-              // if (index != 0) {
-              //   _indexSweepGradient = null;
-              // } else {
-              //   _indexSweepGradient = SweepGradient(colors: [
-              //     Colors.white.withOpacity(0.2),
-              //     Colors.white.withOpacity(0.6),
-              //   ]);
-              // }
-              //2023-12-23关闭扫描动画
-              _indexSweepGradient = null;
             });
           },
           items: const <BottomNavigationBarItem>[

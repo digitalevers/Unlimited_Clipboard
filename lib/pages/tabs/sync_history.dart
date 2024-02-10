@@ -10,6 +10,6 @@ class SyncHistory extends StatefulWidget {
 class _SyncHistoryState extends State<SyncHistory> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Container();
   }
 }

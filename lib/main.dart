@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'A Crossplatform File Transfer Tool',key: MyHomePageKey),
+      home: MyHomePage(title: 'A Crossplatform Clipboard Sync Tool',key: MyHomePageKey),
       builder: BotToastInit(),  //bot_toast
     );
   }
