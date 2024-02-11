@@ -9,17 +9,17 @@ import 'package:rabbit_clipboard/common/func.dart';
 import 'package:rabbit_clipboard/common/globalVariable.dart';
 
 
-//组件单独放在一个文件里则无法访问到 _ReceiveFilesLogState 该类为文件私有
-class ReceiveFilesLog extends StatefulWidget {
-  const ReceiveFilesLog(Key key):super(key:key);
+//组件单独放在一个文件里则无法访问到 _RemoteDevicesState 该类为文件私有
+class RemoteDevices extends StatefulWidget {
+  const RemoteDevices({super.key});
 
   @override
-  State<ReceiveFilesLog> createState() => _ReceiveFilesLogState();
+  State<RemoteDevices> createState() => _RemoteDevicesState();
 }
 
 // ignore: camel_case_types
-class _ReceiveFilesLogState extends State<ReceiveFilesLog> {
-  List<Map<String,dynamic>> receviceFilesLog = [];
+class _RemoteDevicesState extends State<RemoteDevices> {
+  List<Map<String,dynamic>> remoteDevices = [];
   final ScrollController _scrollController = ScrollController();  //ListView 滑动控制器
 
   @override
@@ -35,18 +35,19 @@ class _ReceiveFilesLogState extends State<ReceiveFilesLog> {
 
   void _initState() async{
     // ignore: unnecessary_this
-    //this.receviceFilesLog = _getBaseName(filesLog);
-    //await prefs!.setStringList("receviceFilesLog", filesLog);
+    //this.remoteDevices = _getBaseName(filesLog);
+    //await prefs!.setStringList("remoteDevices", filesLog);
   }
 
   @override
   Widget build(BuildContext context) {
-    return receviceFilesLog.isEmpty ? receviceFilesLogIsEmpty() : receviceFilesLogNotEmpty();
+    return remoteDevices.isEmpty ? remoteDevicesIsEmpty() : remoteDevicesNotEmpty();
   }
 
-  Widget receviceFilesLogIsEmpty(){
+  Widget remoteDevicesIsEmpty(){
     return Container(
-      color: Colors.blue,
+      color: Colors.white,
+      height:200,
       alignment: Alignment.center,
       child: const Text(
         '暂未发现局域网设备',
@@ -55,7 +56,7 @@ class _ReceiveFilesLogState extends State<ReceiveFilesLog> {
     );
   }
 
-  Widget receviceFilesLogNotEmpty(){
+  Widget remoteDevicesNotEmpty(){
     return 
       Scrollbar(
         child: 
@@ -66,11 +67,11 @@ class _ReceiveFilesLogState extends State<ReceiveFilesLog> {
             separatorBuilder: (BuildContext context, int index) {
               return const SizedBox(height: 5);
             },
-            itemCount: receviceFilesLog.length,
+            itemCount: remoteDevices.length,
             itemBuilder: (BuildContext context, int index) {
               return
                 Container(
-                  color: index == receviceFilesLog.length - 1 ? const Color(0xffFC6621) : const Color(0xffFF9E3D),
+                  color: index == remoteDevices.length - 1 ? const Color(0xffFC6621) : const Color(0xffFF9E3D),
                   child: 
                     ListTile(
                       //contentPadding: const EdgeInsets.all(5),
@@ -84,13 +85,11 @@ class _ReceiveFilesLogState extends State<ReceiveFilesLog> {
                       //splashColor: Color.fromARGB(255, 62, 204, 44),
 
                       isThreeLine: false,
-                      title: Text(getShortFileName(p.basename(receviceFilesLog[index]["fileFullPath"]!),15)),
-                      subtitle: Text("来自 ${receviceFilesLog[index]["from"]!}\n日期 ${receviceFilesLog[index]["date"]!}",style: const TextStyle(fontSize:10.0,color: Color.fromARGB(255, 250, 250, 250))),
-                      trailing: SizedBox(
+                      title: Text(getShortFileName(p.basename(remoteDevices[index]["fileFullPath"]!),15)),
+                      subtitle: Text("来自 ${remoteDevices[index]["from"]!}\n日期 ${remoteDevices[index]["date"]!}",style: const TextStyle(fontSize:10.0,color: Color.fromARGB(255, 250, 250, 250))),
+                      trailing: const SizedBox(
                         width: 120,
-                        child: Row(
-                          children: diffGetButtons(receviceFilesLog, index, delFilesLog),
-                      )
+                        child: Text("设为同步设备")
                       )
                     )
                   );
@@ -100,7 +99,7 @@ class _ReceiveFilesLogState extends State<ReceiveFilesLog> {
   }
 
   // void insertFilesLog(String fileInfoJson) async {
-  //   List<String>? filesLog = prefs!.getStringList("receviceFilesLog") ?? [];
+  //   List<String>? filesLog = prefs!.getStringList("remoteDevices") ?? [];
   //   filesLog.add(fileInfoJson);
   //   //遍历文件是否存在
   //   for(int i = 0; i < filesLog.length; i++){
@@ -110,9 +109,9 @@ class _ReceiveFilesLogState extends State<ReceiveFilesLog> {
   //       filesLog.removeAt(i);
   //     }
   //   }
-  //   await prefs!.setStringList("receviceFilesLog", filesLog);
+  //   await prefs!.setStringList("remoteDevices", filesLog);
   //   // ignore: unnecessary_this
-  //   this.receviceFilesLog = _getBaseName(filesLog);
+  //   this.remoteDevices = _getBaseName(filesLog);
   //   setState(() {});
   //   // 延迟500毫秒，再进行滑动
   //   Future.delayed(Duration(milliseconds: 500), () {
@@ -128,7 +127,7 @@ class _ReceiveFilesLogState extends State<ReceiveFilesLog> {
   //     log("文件不存在",StackTrace.current);
   //   }
   //   //遍历文件是否存在
-  //   List<String>? filesLog = prefs!.getStringList("receviceFilesLog") ?? [];
+  //   List<String>? filesLog = prefs!.getStringList("remoteDevices") ?? [];
   //   for(int i = 0; i < filesLog.length; i++){
   //     String fileFullPath = jsonDecode(filesLog[i])["fileFullPath"];
   //     bool fileExist = File(filesLog[i]).existsSync();
@@ -136,14 +135,14 @@ class _ReceiveFilesLogState extends State<ReceiveFilesLog> {
   //       filesLog.removeAt(i);
   //     }
   //   }
-  //   await prefs!.setStringList("receviceFilesLog", filesLog);
+  //   await prefs!.setStringList("remoteDevices", filesLog);
   //   // ignore: unnecessary_this
-  //   this.receviceFilesLog = _getBaseName(filesLog);
+  //   this.remoteDevices = _getBaseName(filesLog);
   //   setState(() {});
   // }
 
   // void selectFilesLog() async{
-  //   List<String>? filesLog = prefs!.getStringList("receviceFilesLog") ?? [];
+  //   List<String>? filesLog = prefs!.getStringList("remoteDevices") ?? [];
   //   //遍历文件是否存在
   //   for(int i = 0; i < filesLog.length; i++){
   //     String fileFullPath = jsonDecode(filesLog[i])["fileFullPath"];
@@ -153,9 +152,9 @@ class _ReceiveFilesLogState extends State<ReceiveFilesLog> {
   //     }
   //   }
     
-  //   await prefs!.setStringList("receviceFilesLog", filesLog);
+  //   await prefs!.setStringList("remoteDevices", filesLog);
   //   // ignore: unnecessary_this
-  //   this.receviceFilesLog = _getBaseName(filesLog);
+  //   this.remoteDevices = _getBaseName(filesLog);
   //   setState(() {});
   // }
 
