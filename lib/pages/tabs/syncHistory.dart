@@ -12,8 +12,8 @@ class _SyncHistoryState extends State<SyncHistory> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
-        getHeaderWidget()
+      children: const [
+        headerWidget()
       ],
     );
   }

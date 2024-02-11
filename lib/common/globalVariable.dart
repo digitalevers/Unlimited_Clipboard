@@ -47,7 +47,7 @@ class HttpResponseCode {
 
 class GlobalVariables {
   //日志开关
-  static const bool logDebug = false;
+  static const bool logDebug = true;
   static const bool useProxy = false;
   static const String proxy = "10.7.0.158:8888";
   //http server端口
@@ -57,11 +57,11 @@ class GlobalVariables {
   //项目官网
   static const String website = "https://rabbit.digitalevers.com";
   //本地设备和网络信息
-  static const Map<String, String> deviceInfo = {
-    "model": "iphone se2",
-    "lanIP": "192.168.1.1",
-    "networkText": "wifi",
-    "deviceType": "iphone"
+  static Map<String, String> deviceInfo = {
+    "model": "",
+    "lanIP": "",
+    "networkText": "",
+    "deviceType": ""
   };
   //服务器返回标识
   static const Map<int, String> httpResponseCodeMsg = {

@@ -8,7 +8,6 @@ import 'package:path/path.dart' as p;
 import 'package:rabbit_clipboard/common/func.dart';
 import 'package:rabbit_clipboard/common/globalVariable.dart';
 
-
 //组件单独放在一个文件里则无法访问到 _RemoteDevicesState 该类为文件私有
 class RemoteDevices extends StatefulWidget {
   const RemoteDevices({super.key});
@@ -19,8 +18,9 @@ class RemoteDevices extends StatefulWidget {
 
 // ignore: camel_case_types
 class _RemoteDevicesState extends State<RemoteDevices> {
-  List<Map<String,dynamic>> remoteDevices = [];
-  final ScrollController _scrollController = ScrollController();  //ListView 滑动控制器
+  List<Map<String, dynamic>> remoteDevices = [];
+  final ScrollController _scrollController =
+      ScrollController(); //ListView 滑动控制器
 
   @override
   void initState() {
@@ -33,7 +33,7 @@ class _RemoteDevicesState extends State<RemoteDevices> {
     // });
   }
 
-  void _initState() async{
+  void _initState() async {
     // ignore: unnecessary_this
     //this.remoteDevices = _getBaseName(filesLog);
     //await prefs!.setStringList("remoteDevices", filesLog);
@@ -41,61 +41,57 @@ class _RemoteDevicesState extends State<RemoteDevices> {
 
   @override
   Widget build(BuildContext context) {
-    return remoteDevices.isEmpty ? remoteDevicesIsEmpty() : remoteDevicesNotEmpty();
+    return remoteDevices.isEmpty  ? remoteDevicesIsEmpty() : remoteDevicesNotEmpty();
   }
 
-  Widget remoteDevicesIsEmpty(){
-    return Container(
-      color: Colors.white,
-      height:200,
-      alignment: Alignment.center,
-      child: const Text(
-        '暂未发现局域网设备',
-        style: TextStyle(color: Color(0xffEDF1F2)),
-      )
-    );
-  }
-
-  Widget remoteDevicesNotEmpty(){
-    return 
-      Scrollbar(
-        child: 
-          ListView.separated(
-            controller: _scrollController,
-            padding:const EdgeInsets.all(5),
-            reverse: false,
-            separatorBuilder: (BuildContext context, int index) {
-              return const SizedBox(height: 5);
-            },
-            itemCount: remoteDevices.length,
-            itemBuilder: (BuildContext context, int index) {
-              return
-                Container(
-                  color: index == remoteDevices.length - 1 ? const Color(0xffFC6621) : const Color(0xffFF9E3D),
-                  child: 
-                    ListTile(
-                      //contentPadding: const EdgeInsets.all(5),
-                      //tileColor: const Color(0xffFF9E3D),
-                      //selectedTileColor:const Color(0xff1122dd),
-                      iconColor:const Color(0xffFFFFFF),
-                      textColor:const Color(0xffFFFFFF),
-                      //selectedColor:const Color(0xff1122dd),
-                      //focusColor:Color.fromARGB(255, 197, 30, 30),
-                      //hoverColor:Color.fromARGB(255, 185, 28, 216),
-                      //splashColor: Color.fromARGB(255, 62, 204, 44),
-
-                      isThreeLine: false,
-                      title: Text(getShortFileName(p.basename(remoteDevices[index]["fileFullPath"]!),15)),
-                      subtitle: Text("来自 ${remoteDevices[index]["from"]!}\n日期 ${remoteDevices[index]["date"]!}",style: const TextStyle(fontSize:10.0,color: Color.fromARGB(255, 250, 250, 250))),
-                      trailing: const SizedBox(
-                        width: 120,
-                        child: Text("设为同步设备")
-                      )
-                    )
-                  );
-            },
+  Widget remoteDevicesIsEmpty() {
+    //Expanded 和 Container 结合使用可以占满剩余高度
+    return Expanded(
+      child:
+        Container(
+          color: Colors.white,
+          alignment: Alignment.center,
+          child:  const Text(
+            '暂未发现局域网设备',
+            style: TextStyle(color: Colors.black),
           )
+        ) 
       );
+    
+  }
+
+  Widget remoteDevicesNotEmpty() {
+    return Scrollbar(
+        child: ListView.separated(
+      controller: _scrollController,
+      padding: const EdgeInsets.all(5),
+      reverse: false,
+      separatorBuilder: (BuildContext context, int index) {
+        return const SizedBox(height: 5);
+      },
+      itemCount: remoteDevices.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Container(
+            color: index == remoteDevices.length - 1 ? const Color(0xffFC6621) : const Color(0xffFF9E3D),
+            child: ListTile(
+                //contentPadding: const EdgeInsets.all(5),
+                //tileColor: const Color(0xffFF9E3D),
+                //selectedTileColor:const Color(0xff1122dd),
+                iconColor: const Color(0xffFFFFFF),
+                textColor: const Color(0xffFFFFFF),
+                //selectedColor:const Color(0xff1122dd),
+                //focusColor:Color.fromARGB(255, 197, 30, 30),
+                //hoverColor:Color.fromARGB(255, 185, 28, 216),
+                //splashColor: Color.fromARGB(255, 62, 204, 44),
+
+                isThreeLine: false,
+                title: Text(getShortFileName(p.basename(remoteDevices[index]["fileFullPath"]!), 15)),
+                subtitle: Text(
+                    "来自 ${remoteDevices[index]["from"]!}\n日期 ${remoteDevices[index]["date"]!}",
+                    style: const TextStyle(fontSize: 10.0,color: Color.fromARGB(255, 250, 250, 250))),
+                trailing: const SizedBox(width: 120, child: Text("设为同步设备"))));
+      },
+    ));
   }
 
   // void insertFilesLog(String fileInfoJson) async {
@@ -151,7 +147,7 @@ class _RemoteDevicesState extends State<RemoteDevices> {
   //       filesLog.removeAt(i);
   //     }
   //   }
-    
+
   //   await prefs!.setStringList("remoteDevices", filesLog);
   //   // ignore: unnecessary_this
   //   this.remoteDevices = _getBaseName(filesLog);
@@ -168,6 +164,4 @@ class _RemoteDevicesState extends State<RemoteDevices> {
   //   }
   //   return baseNameFilesLog;
   // }
-
-  
 }

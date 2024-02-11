@@ -13,9 +13,9 @@ class _SyncDevicesState extends State<SyncDevices> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
-        getHeaderWidget(),
-        const RemoteDevices(),
+      children: const [
+        headerWidget(),
+        RemoteDevices(),
       ],
     );
   }
