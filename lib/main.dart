@@ -49,9 +49,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(
+      home: const MyHomePage(
           title: 'A Crossplatform Clipboard Sync Tool',
-          key: GlobalVariables.myHomePageKey),
+          //key: GlobalVariables.myHomePageKey
+        ),
       builder: BotToastInit(), //bot_toast
     );
   }

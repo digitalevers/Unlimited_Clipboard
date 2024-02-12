@@ -6,7 +6,7 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 //import 'package:hive/hive.dart';
 //import 'package:rabbit_clipboard/controllers/controllers.dart';
 
-import 'file_services.dart';
+import 'fileServices.dart';
 //import 'package:rabbit_clipboard/main.dart';
 //import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;

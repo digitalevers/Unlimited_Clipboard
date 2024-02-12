@@ -54,14 +54,17 @@ class GlobalVariables {
   static const int httpServerPort = 8888;
   //UDP广播和接收数据端口
   static const int udpPort = 10000;
+  //UDP广播频次间隔时间 秒
+  static int udpBroadInternalTime = 3;
+  static RawDatagramSocket? socket;
   //项目官网
   static const String website = "https://rabbit.digitalevers.com";
   //本地设备和网络信息
   static Map<String, String> deviceInfo = {
-    "model": "",
-    "lanIP": "",
-    "networkText": "",
-    "deviceType": ""
+    "model": "...",
+    "lanIP": "...",
+    "networkText": "...",
+    "deviceType": "..."
   };
   //服务器返回标识
   static const Map<int, String> httpResponseCodeMsg = {
@@ -79,5 +82,5 @@ class GlobalVariables {
   static List<Map<String, String>> fileList = [];
   static final GlobalKey tabsKey = GlobalKey();
   static final GlobalKey<NavigatorState> nav = GlobalKey<NavigatorState>();
-  static final GlobalKey myHomePageKey = GlobalKey();
+  static final GlobalKey headerWidgetKey = GlobalKey();
 }

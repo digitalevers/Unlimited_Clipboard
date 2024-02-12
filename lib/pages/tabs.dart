@@ -1,14 +1,15 @@
-import 'package:bot_toast/bot_toast.dart';
+import 'dart:io';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:rabbit_clipboard/common/commclass.dart';
 
 import 'tabs/syncDevices.dart';
 import 'tabs/syncHistory.dart';
 
 import 'package:rabbit_clipboard/pages/modules/privacyPage.dart';
-import 'package:rabbit_clipboard/services/client.dart';
-import 'package:rabbit_clipboard/common/func.dart';
 import 'package:rabbit_clipboard/common/globalVariable.dart';
+import 'package:rabbit_clipboard/services/udpServices.dart';
 //import 'package:showcaseview/showcaseview.dart';
 
 class Tabs extends StatefulWidget {
@@ -21,14 +22,13 @@ class Tabs extends StatefulWidget {
   }
 }
 
-// ignore: camel_case_types
 class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
   //默认显示的tab index
   int _currentIndex = 0;
   List<Map<String, String>> chooseFiles = [];
   String showShortFileName = '';
   final List<Widget> _pages = [
-    const SyncDevices(),
+    SyncDevices(),
     const SyncHistory(),
   ];
 
@@ -36,9 +36,62 @@ class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
   //final GlobalKey _one = GlobalKey();
   //late BuildContext myContext;
 
+  //初始化获取设备和wifi信息
+  Future<void> _initGetInfo() async {
+    Map deviceInfo_ = await DeviceInfoApi.getDeviceInfo();
+    //log(deviceInfo_, StackTrace.current);
+    GlobalVariables.deviceInfo['model'] =
+        deviceInfo_['model'] ?? deviceInfo_['prettyName']; //linux
+    GlobalVariables.deviceInfo['deviceType'] = Platform.operatingSystem;
+    DeviceInfoApi.getNetworkInfo(_listenConnectivityChanged);
+  }
+
+  /// 监听网络类型的改变
+  /// 改变ip和wifi接入情况
+  /// ethernet wifi mobile none
+  Future<void> _listenConnectivityChanged(ConnectivityResult result) async {
+    Map result_ = await DeviceInfoApi.parseNetworkInfoResult(result);
+    //log(result_, StackTrace.current);
+    String networkText, lanIP;
+    if (result_['type'] == 'nowifi') {
+      networkText = '未接入WiFi';
+    } else {
+      networkText = result_['wifiName'];
+    }
+    //由移动网络切换到WiFi下继续启动UDP广播
+    lanIP = await DeviceInfoApi.getDeviceLocalIP();
+    if (lanIP.isEmpty) {
+      lanIP = "无法获取ip";
+    }
+    if ((result_['type'] == 'wifi' || result_['type'] == 'ethernet') && lanIP.isNotEmpty) {
+      udpServices.startUDP();
+    } else {
+      //由WiFi切换到移动网络下关闭UDP广播
+      udpServices.stopUDP();
+    }
+    //刷新 headerWidget
+    GlobalVariables.headerWidgetKey.currentState?.setState(() {
+      GlobalVariables.deviceInfo['networkText'] = networkText;
+      GlobalVariables.deviceInfo['lanIP'] = lanIP;
+    });
+  }
+
+  // void initEnv() {
+  //   log(deviceInfo_, StackTrace.current);
+  //   startUDP();
+  //   startCleanTimer();
+  //   启动HTTP SERVER并传入key 便于在server类中获取context
+  //   await Server.startServer(sendToAppBodyKey, receiveFilesLogKey);
+  // }
+
   @override
   void initState() {
     super.initState();
+    _initGetInfo();
+    //startCleanTimer();
+    //启动HTTP SERVER并传入key 便于在server类中获取context
+    //Server.startServer(sendToAppBodyKey, receiveFilesLogKey);
+    //log("init Tabs", StackTrace.current);
   }
 
   @override
