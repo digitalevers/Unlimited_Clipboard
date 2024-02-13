@@ -83,4 +83,5 @@ class GlobalVariables {
   static final GlobalKey tabsKey = GlobalKey();
   static final GlobalKey<NavigatorState> nav = GlobalKey<NavigatorState>();
   static final GlobalKey headerWidgetKey = GlobalKey();
+  static final GlobalKey remoteDevicesKey = GlobalKey();
 }

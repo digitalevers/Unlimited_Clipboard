@@ -28,7 +28,7 @@ class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
   List<Map<String, String>> chooseFiles = [];
   String showShortFileName = '';
   final List<Widget> _pages = [
-    SyncDevices(),
+    const SyncDevices(),
     const SyncHistory(),
   ];
 
@@ -40,8 +40,7 @@ class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
   Future<void> _initGetInfo() async {
     Map deviceInfo_ = await DeviceInfoApi.getDeviceInfo();
     //log(deviceInfo_, StackTrace.current);
-    GlobalVariables.deviceInfo['model'] =
-        deviceInfo_['model'] ?? deviceInfo_['prettyName']; //linux
+    GlobalVariables.deviceInfo['model'] = deviceInfo_['model'] ?? deviceInfo_['prettyName']; //linux
     GlobalVariables.deviceInfo['deviceType'] = Platform.operatingSystem;
     DeviceInfoApi.getNetworkInfo(_listenConnectivityChanged);
   }

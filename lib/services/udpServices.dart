@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/widgets.dart';
 import 'package:rabbit_clipboard/common/func.dart';
 import 'package:rabbit_clipboard/common/globalVariable.dart';
+import 'package:rabbit_clipboard/pages/modules/remoteDevices.dart';
 
 class udpServices {
   //UDP广播定时器
@@ -20,7 +22,8 @@ class udpServices {
       return;
     }
     _startUDPLock = true;
-    GlobalVariables.socket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, GlobalVariables.udpPort);
+    GlobalVariables.socket = await RawDatagramSocket.bind(
+        InternetAddress.anyIPv4, GlobalVariables.udpPort);
     GlobalVariables.socket?.broadcastEnabled = true;
     log('UDP Echo ready to receive', StackTrace.current);
     Duration timeout = Duration(seconds: GlobalVariables.udpBroadInternalTime);
@@ -37,11 +40,14 @@ class udpServices {
       //[0x44, 0x48, 0x01, 0x01]
       if (Platform.isIOS || Platform.isMacOS) {
         //动态获取子网地址前三段
-        List<String> ipList = GlobalVariables.deviceInfo['lanIP'].toString().split(".");
+        List<String> ipList =
+            GlobalVariables.deviceInfo['lanIP'].toString().split(".");
         ipList[ipList.length - 1] = "255";
-        GlobalVariables.socket?.send(broadJson.codeUnits, InternetAddress(ipList.join(".")), GlobalVariables.udpPort);
+        GlobalVariables.socket?.send(broadJson.codeUnits,
+            InternetAddress(ipList.join(".")), GlobalVariables.udpPort);
       } else {
-        GlobalVariables.socket?.send(broadJson.codeUnits, InternetAddress("255.255.255.255"), GlobalVariables.udpPort);
+        GlobalVariables.socket?.send(broadJson.codeUnits,
+            InternetAddress("255.255.255.255"), GlobalVariables.udpPort);
       }
     });
     //print('${socket?.address.address}:${socket?.port}');
@@ -77,20 +83,22 @@ class udpServices {
               // });
             } else {
               if (_json['lanIP'] != GlobalVariables.deviceInfo['lanIP']) {
+                dynamic _key = GlobalVariables.remoteDevicesKey;
+                _key.currentState!.addRemoteDevice();
                 //判断设备是否已经添加进显示区
-                //log(remoteDevicesData,StackTrace.current);
-                // if (!remoteDevicesData.containsKey(_json['lanIP'])) {
-                //   setState(() {
-                //     addRemoteDeviceToWidget(_json);
-                //     //不能直接赋值 必须深拷贝
-                //     //remoteDevicesWidgetPlus = remoteDevicesWidget;
-                //     remoteDevicesWidgetPlus = [...remoteDevicesWidget];
-                //     remoteDevicesWidgetPlus.add(_waterRipple);
-                //   });
-                // } else {
-                //   //旧设备则更新毫秒时间戳
-                //   remoteDevicesData[_json['lanIP']]!['millTimeStamp'] = DateTime.now().millisecondsSinceEpoch;
-                // }
+                log(_key.currentState!.remoteDevicesData, StackTrace.current);
+                if (!_remote_.containsKey(_json['lanIP'])) {
+                  // setState(() {
+                  //   addRemoteDeviceToWidget(_json);
+                  //   //不能直接赋值 必须深拷贝
+                  //   //remoteDevicesWidgetPlus = remoteDevicesWidget;
+                  //   remoteDevicesWidgetPlus = [...remoteDevicesWidget];
+                  //   remoteDevicesWidgetPlus.add(_waterRipple);
+                  // });
+                } else {
+                  //旧设备则更新毫秒时间戳
+                  //remoteDevicesData[_json['lanIP']]!['millTimeStamp'] = DateTime.now().millisecondsSinceEpoch;
+                }
               }
             }
           }
@@ -121,7 +129,7 @@ class udpServices {
     });
   }
 
-    //发送一个设备下线通知广播
+  //发送一个设备下线通知广播
   static sendOfflineNotify() {
     Map offlineNotifyMap = {
       'notifyType': 2,
@@ -130,10 +138,11 @@ class udpServices {
       'deviceType': GlobalVariables.deviceInfo['deviceType']
     };
     String offlineNotifyJson = json.encode(offlineNotifyMap);
-    GlobalVariables.socket?.send(offlineNotifyJson.codeUnits,InternetAddress("255.255.255.255"), GlobalVariables.udpPort);
+    GlobalVariables.socket?.send(offlineNotifyJson.codeUnits,
+        InternetAddress("255.255.255.255"), GlobalVariables.udpPort);
   }
 
-  static void stopUDP(){
+  static void stopUDP() {
     sendOfflineNotify();
     _startUDPLock = false;
     GlobalVariables.socket?.close();
@@ -141,4 +150,3 @@ class udpServices {
     timer?.cancel();
   }
 }
-

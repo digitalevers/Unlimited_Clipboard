@@ -10,7 +10,7 @@ import 'package:rabbit_clipboard/common/globalVariable.dart';
 
 //组件单独放在一个文件里则无法访问到 _RemoteDevicesState 该类为文件私有
 class RemoteDevices extends StatefulWidget {
-  const RemoteDevices({super.key});
+  const RemoteDevices(Key key) : super(key: key);
 
   @override
   State<RemoteDevices> createState() => _RemoteDevicesState();
@@ -18,9 +18,8 @@ class RemoteDevices extends StatefulWidget {
 
 // ignore: camel_case_types
 class _RemoteDevicesState extends State<RemoteDevices> {
-  List<Map<String, dynamic>> remoteDevices = [];
-  final ScrollController _scrollController =
-      ScrollController(); //ListView 滑动控制器
+  static List<Map<String, dynamic>> remoteDevicesData = [];
+  final ScrollController _scrollController = ScrollController(); //ListView 滑动控制器
 
   @override
   void initState() {
@@ -34,30 +33,27 @@ class _RemoteDevicesState extends State<RemoteDevices> {
   }
 
   void _initState() async {
-    // ignore: unnecessary_this
     //this.remoteDevices = _getBaseName(filesLog);
     //await prefs!.setStringList("remoteDevices", filesLog);
   }
 
   @override
   Widget build(BuildContext context) {
-    return remoteDevices.isEmpty  ? remoteDevicesIsEmpty() : remoteDevicesNotEmpty();
+    return remoteDevicesData.isEmpty
+        ? remoteDevicesIsEmpty()
+        : remoteDevicesNotEmpty();
   }
 
   Widget remoteDevicesIsEmpty() {
     //Expanded 和 Container 结合使用可以占满剩余高度
     return Expanded(
-      child:
-        Container(
-          color: Colors.white,
-          alignment: Alignment.center,
-          child:  const Text(
-            '暂未发现局域网设备',
-            style: TextStyle(color: Colors.black),
-          )
-        ) 
-      );
-    
+        child: Container(
+            color: Colors.white,
+            alignment: Alignment.center,
+            child: const Text(
+              '暂未发现局域网设备',
+              style: TextStyle(color: Colors.black),
+            )));
   }
 
   Widget remoteDevicesNotEmpty() {
@@ -69,10 +65,12 @@ class _RemoteDevicesState extends State<RemoteDevices> {
       separatorBuilder: (BuildContext context, int index) {
         return const SizedBox(height: 5);
       },
-      itemCount: remoteDevices.length,
+      itemCount: remoteDevicesData.length,
       itemBuilder: (BuildContext context, int index) {
         return Container(
-            color: index == remoteDevices.length - 1 ? const Color(0xffFC6621) : const Color(0xffFF9E3D),
+            color: index == remoteDevicesData.length - 1
+                ? const Color(0xffFC6621)
+                : const Color(0xffFF9E3D),
             child: ListTile(
                 //contentPadding: const EdgeInsets.all(5),
                 //tileColor: const Color(0xffFF9E3D),
@@ -85,14 +83,19 @@ class _RemoteDevicesState extends State<RemoteDevices> {
                 //splashColor: Color.fromARGB(255, 62, 204, 44),
 
                 isThreeLine: false,
-                title: Text(getShortFileName(p.basename(remoteDevices[index]["fileFullPath"]!), 15)),
+                title: Text(getShortFileName(
+                    p.basename(remoteDevicesData[index]["fileFullPath"]!), 15)),
                 subtitle: Text(
-                    "来自 ${remoteDevices[index]["from"]!}\n日期 ${remoteDevices[index]["date"]!}",
-                    style: const TextStyle(fontSize: 10.0,color: Color.fromARGB(255, 250, 250, 250))),
+                    "来自 ${remoteDevicesData[index]["from"]!}\n日期 ${remoteDevicesData[index]["date"]!}",
+                    style: const TextStyle(
+                        fontSize: 10.0,
+                        color: Color.fromARGB(255, 250, 250, 250))),
                 trailing: const SizedBox(width: 120, child: Text("设为同步设备"))));
       },
     ));
   }
+
+  void addRemoteDevice() {}
 
   // void insertFilesLog(String fileInfoJson) async {
   //   List<String>? filesLog = prefs!.getStringList("remoteDevices") ?? [];

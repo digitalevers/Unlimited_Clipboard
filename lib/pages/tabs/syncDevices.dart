@@ -9,16 +9,17 @@ import 'package:rabbit_clipboard/services/udpServices.dart';
 import 'package:rabbit_clipboard/pages/modules/remoteDevices.dart';
 
 class SyncDevices extends StatefulWidget {
-  SyncDevices({super.key});
+  const SyncDevices({super.key});
 
   @override
   State<SyncDevices> createState() => _SyncDevicesState();
 }
 
 class _SyncDevicesState extends State<SyncDevices> {
+
   @override
   void initState() {
-    
+    super.initState();
   }
 
   @override
@@ -26,7 +27,7 @@ class _SyncDevicesState extends State<SyncDevices> {
     return Column(
       children: [
         headerWidget(key: GlobalVariables.headerWidgetKey),
-        const RemoteDevices(),
+        RemoteDevices(GlobalVariables.remoteDevicesKey),
       ],
     );
   }
