@@ -18,8 +18,11 @@ class RemoteDevices extends StatefulWidget {
 
 // ignore: camel_case_types
 class _RemoteDevicesState extends State<RemoteDevices> {
-  static List<Map<String, dynamic>> remoteDevicesData = [];
-  final ScrollController _scrollController = ScrollController(); //ListView 滑动控制器
+  List<Map<String, dynamic>> remoteDevicesData = [
+    //{"lanIP": "192.168.2.3", "deviceName": "airbook", "deviceType": "macos"}
+  ];
+  final ScrollController _scrollController =
+      ScrollController(); //ListView 滑动控制器
 
   @override
   void initState() {
@@ -57,7 +60,7 @@ class _RemoteDevicesState extends State<RemoteDevices> {
   }
 
   Widget remoteDevicesNotEmpty() {
-    return Scrollbar(
+    return Expanded(child: Scrollbar(
         child: ListView.separated(
       controller: _scrollController,
       padding: const EdgeInsets.all(5),
@@ -83,16 +86,15 @@ class _RemoteDevicesState extends State<RemoteDevices> {
                 //splashColor: Color.fromARGB(255, 62, 204, 44),
 
                 isThreeLine: false,
-                title: Text(getShortFileName(
-                    p.basename(remoteDevicesData[index]["fileFullPath"]!), 15)),
+                title: Text(remoteDevicesData[index]["deviceName"]),
                 subtitle: Text(
-                    "来自 ${remoteDevicesData[index]["from"]!}\n日期 ${remoteDevicesData[index]["date"]!}",
-                    style: const TextStyle(
-                        fontSize: 10.0,
-                        color: Color.fromARGB(255, 250, 250, 250))),
+                    "${remoteDevicesData[index]["lanIP"]!}",
+                    style: const TextStyle(fontSize: 12.0,color: Color.fromARGB(255, 250, 250, 250))),
                 trailing: const SizedBox(width: 120, child: Text("设为同步设备"))));
       },
-    ));
+    )))
+    
+    ;
   }
 
   void addRemoteDevice() {}
