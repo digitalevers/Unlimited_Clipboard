@@ -42,9 +42,7 @@ class _RemoteDevicesState extends State<RemoteDevices> {
 
   @override
   Widget build(BuildContext context) {
-    return remoteDevicesData.isEmpty
-        ? remoteDevicesIsEmpty()
-        : remoteDevicesNotEmpty();
+    return remoteDevicesData.isEmpty ? remoteDevicesIsEmpty() : remoteDevicesNotEmpty();
   }
 
   Widget remoteDevicesIsEmpty() {
@@ -60,41 +58,38 @@ class _RemoteDevicesState extends State<RemoteDevices> {
   }
 
   Widget remoteDevicesNotEmpty() {
-    return Expanded(child: Scrollbar(
-        child: ListView.separated(
-      controller: _scrollController,
-      padding: const EdgeInsets.all(5),
-      reverse: false,
-      separatorBuilder: (BuildContext context, int index) {
-        return const SizedBox(height: 5);
-      },
-      itemCount: remoteDevicesData.length,
-      itemBuilder: (BuildContext context, int index) {
-        return Container(
-            color: index == remoteDevicesData.length - 1
-                ? const Color(0xffFC6621)
-                : const Color(0xffFF9E3D),
-            child: ListTile(
-                //contentPadding: const EdgeInsets.all(5),
-                //tileColor: const Color(0xffFF9E3D),
-                //selectedTileColor:const Color(0xff1122dd),
-                iconColor: const Color(0xffFFFFFF),
-                textColor: const Color(0xffFFFFFF),
-                //selectedColor:const Color(0xff1122dd),
-                //focusColor:Color.fromARGB(255, 197, 30, 30),
-                //hoverColor:Color.fromARGB(255, 185, 28, 216),
-                //splashColor: Color.fromARGB(255, 62, 204, 44),
+    return Expanded(child: 
+      Scrollbar(
+        child: 
+          ListView.separated(
+            controller: _scrollController,
+            padding: const EdgeInsets.all(5),
+            reverse: false,
+            separatorBuilder: (BuildContext context, int index) {
+              return const SizedBox(height: 5);
+            },
+            itemCount: remoteDevicesData.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                  color: index == remoteDevicesData.length - 1 ? const Color(0xffFC6621)  : const Color(0xffFF9E3D),
+                  child: ListTile(
+                      //contentPadding: const EdgeInsets.all(5),
+                      //tileColor: const Color(0xffFF9E3D),
+                      //selectedTileColor:const Color(0xff1122dd),
+                      iconColor: const Color(0xffFFFFFF),
+                      textColor: const Color(0xffFFFFFF),
+                      //selectedColor:const Color(0xff1122dd),
+                      //focusColor:Color.fromARGB(255, 197, 30, 30),
+                      //hoverColor:Color.fromARGB(255, 185, 28, 216),
+                      //splashColor: Color.fromARGB(255, 62, 204, 44),
 
-                isThreeLine: false,
-                title: Text(remoteDevicesData[index]["deviceName"]),
-                subtitle: Text(
-                    "${remoteDevicesData[index]["lanIP"]!}",
-                    style: const TextStyle(fontSize: 12.0,color: Color.fromARGB(255, 250, 250, 250))),
-                trailing: const SizedBox(width: 120, child: Text("设为同步设备"))));
-      },
-    )))
-    
-    ;
+                      isThreeLine: false,
+                      title: Text(remoteDevicesData[index]["deviceName"]),
+                      subtitle: Text("${remoteDevicesData[index]["lanIP"]!}",style: const TextStyle(fontSize: 12.0,color: Color.fromARGB(255, 250, 250, 250))),
+                      trailing: const SizedBox(width: 120, child: Text("设为同步设备"))));
+            },
+          ))
+      );
   }
 
   void addRemoteDevice() {}

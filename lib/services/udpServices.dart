@@ -40,14 +40,11 @@ class udpServices {
       //[0x44, 0x48, 0x01, 0x01]
       if (Platform.isIOS || Platform.isMacOS) {
         //动态获取子网地址前三段
-        List<String> ipList =
-            GlobalVariables.deviceInfo['lanIP'].toString().split(".");
+        List<String> ipList = GlobalVariables.deviceInfo['lanIP'].toString().split(".");
         ipList[ipList.length - 1] = "255";
-        GlobalVariables.socket?.send(broadJson.codeUnits,
-            InternetAddress(ipList.join(".")), GlobalVariables.udpPort);
+        GlobalVariables.socket?.send(broadJson.codeUnits,InternetAddress(ipList.join(".")), GlobalVariables.udpPort);
       } else {
-        GlobalVariables.socket?.send(broadJson.codeUnits,
-            InternetAddress("255.255.255.255"), GlobalVariables.udpPort);
+        GlobalVariables.socket?.send(broadJson.codeUnits, InternetAddress("255.255.255.255"), GlobalVariables.udpPort);
       }
     });
     //print('${socket?.address.address}:${socket?.port}');
