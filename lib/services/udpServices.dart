@@ -142,8 +142,7 @@ class udpServices {
       'deviceType': GlobalVariables.deviceInfo['deviceType']
     };
     String offlineNotifyJson = json.encode(offlineNotifyMap);
-    GlobalVariables.socket?.send(offlineNotifyJson.codeUnits,
-        InternetAddress("255.255.255.255"), GlobalVariables.udpPort);
+    GlobalVariables.socket?.send(offlineNotifyJson.codeUnits, InternetAddress("255.255.255.255"), GlobalVariables.udpPort);
   }
 
   static void stopUDP() {

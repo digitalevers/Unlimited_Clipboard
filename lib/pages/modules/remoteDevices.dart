@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 //import 'package:flutter/services.dart';
@@ -71,13 +72,18 @@ class _RemoteDevicesState extends State<RemoteDevices> {
             itemCount: remoteDevicesData.length,
             itemBuilder: (BuildContext context, int index) {
               return Container(
-                  color: index == remoteDevicesData.length - 1 ? const Color(0xffFC6621)  : const Color(0xffFF9E3D),
+                  color: const Color.fromARGB(255, 255, 255, 255),
                   child: ListTile(
-                      //contentPadding: const EdgeInsets.all(5),
+                      //dense:false,
+                      contentPadding: const EdgeInsets.all(0),
                       //tileColor: const Color(0xffFF9E3D),
                       //selectedTileColor:const Color(0xff1122dd),
-                      iconColor: const Color(0xffFFFFFF),
-                      textColor: const Color(0xffFFFFFF),
+                      leading:Icon(
+                          getRemoteDeviceTypeIcon(remoteDevicesData[index]["deviceType"]),
+                          color: const Color.fromARGB(255, 126, 126, 126),
+                        ),
+                      //iconColor: Color.fromARGB(255, 134, 134, 134),
+                      textColor: const Color.fromARGB(255, 126, 126, 126),
                       //selectedColor:const Color(0xff1122dd),
                       //focusColor:Color.fromARGB(255, 197, 30, 30),
                       //hoverColor:Color.fromARGB(255, 185, 28, 216),
@@ -85,8 +91,28 @@ class _RemoteDevicesState extends State<RemoteDevices> {
 
                       isThreeLine: false,
                       title: Text(remoteDevicesData[index]["deviceName"]),
-                      subtitle: Text("${remoteDevicesData[index]["lanIP"]!}",style: const TextStyle(fontSize: 12.0,color: Color.fromARGB(255, 250, 250, 250))),
-                      trailing: const SizedBox(width: 120, child: Text("设为同步设备"))));
+                      subtitle: Text("${remoteDevicesData[index]["lanIP"]!}",style: const TextStyle(fontSize: 12.0,color: Color.fromARGB(255, 126, 126, 126))),
+                      trailing:  
+                                Container(
+                                  width: 120,
+                                  height: double.infinity,
+                                  alignment: Alignment.center,
+                                  //child: Text("设为同步设备",style: const TextStyle(color: Color.fromARGB(255, 255, 255, 255))),
+                                  
+                                  color:const Color(0xFFFC6621),
+                                  child: Stack(
+                                    alignment: Alignment.topRight,
+                                    children: [
+                                      CustomPaint(
+                                        painter: ArcPainter(labelTitle: "123"),
+                                        size: const Size(26,26), // 调整大小以适应你的需求
+                                      ),
+                                      const Positioned(child: Icon(Icons.sync,size: 16,color: Colors.white)),
+                                      const Center(child: Text("取消同步",style: TextStyle(color: Color(0xFFe41749))))
+                                    ]
+                                  ),
+                                ),
+                      ));
             },
           ))
       );
@@ -164,4 +190,54 @@ class _RemoteDevicesState extends State<RemoteDevices> {
   //   }
   //   return baseNameFilesLog;
   // }
+}
+
+class ArcPainter extends CustomPainter {
+
+  //标签文字
+  String labelTitle;
+  ArcPainter({required this.labelTitle});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    double originX = 0.0 ;
+    double originY = 0.0 ;
+
+    double cx = size.width / 2;
+    double cy = size.height / 2;
+    Paint _paint = Paint()
+      ..color = Colors.blue
+      ..strokeWidth = 2
+    //画笔是线段（默认是fill填充）
+    /*..style = PaintingStyle.stroke*/;
+
+    // canvas.drawCircle(Offset(cx,cy), 2, _paint);
+    Path path = Path();
+    // 绘制圆锥路径 权重越大路径越接近直角（不使用path.moveTo时，默认起点为左上角）
+    path.conicTo(originX + size.width, originY, originX + size.width, originY+ size.height, 100);
+    // 控制路径是否闭合，可不写
+    path.close();
+    canvas.drawPath(path, _paint);
+    canvas.save();
+    canvas.restore();
+
+    // TextPainter textPainterCenter = TextPainter(
+    //   text: TextSpan(text: labelTitle, style: TextStyle(color: Color(0xff333333),fontSize: 10)),
+    //   textDirection: TextDirection.ltr,
+    // );
+    // textPainterCenter.layout();
+    canvas.rotate(pi / 4);
+    canvas.translate(- pi , -((cy - pi)  * 2));
+    //textPainterCenter.paint(canvas, Offset(cx /*- textPainterCenter.size.width / 2*/,cy - textPainterCenter.size.height / 4));
+    canvas.save();
+    canvas.restore();
+  }
+
+  /// 度数转类似于π的那种角度
+  double degToRad(double deg) => deg * (pi / 180.0);
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
+  }
 }
