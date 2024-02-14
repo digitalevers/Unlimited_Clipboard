@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
@@ -92,8 +93,11 @@ class _RemoteDevicesState extends State<RemoteDevices> {
                       isThreeLine: false,
                       title: Text(remoteDevicesData[index]["deviceName"]),
                       subtitle: Text("${remoteDevicesData[index]["lanIP"]!}",style: const TextStyle(fontSize: 12.0,color: Color.fromARGB(255, 126, 126, 126))),
-                      trailing:  
-                                Container(
+                      trailing: InkWell(
+                                onTap:(){
+                                  BotToast.showText(text: "已取消同步");
+                                },
+                                child:Container(
                                   width: 120,
                                   height: double.infinity,
                                   alignment: Alignment.center,
@@ -110,8 +114,9 @@ class _RemoteDevicesState extends State<RemoteDevices> {
                                       const Positioned(child: Icon(Icons.sync,size: 16,color: Colors.white)),
                                       const Center(child: Text("取消同步",style: TextStyle(color: Color(0xFFe41749))))
                                     ]
-                                  ),
-                                ),
+                                  )
+                                )),
+                                
                       ));
             },
           ))
