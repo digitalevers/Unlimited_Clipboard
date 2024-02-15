@@ -98,40 +98,16 @@ Map<String,String>  getFileInfo(String storageOrPrivateUri){
   return fileInfo;
 }
 
-//发送文件信息 客户端发送到服务端
-Future<void> sendFileInfo(HttpClient client_, String serverIP_, int serverPort_, List<Map<String,String>> fileList_, context_) async {
-  int fileCount = fileList_.length;  //待发送文件数量
-  int fileSize = 0;                   //待发送文件大小 单位M
-  for(int i = 0;i < fileCount;i++){
-    fileSize += int.parse(fileList_[i]['fileSize']!);
-  }
-  
-  String url      = "http://$serverIP_:$serverPort_/fileinfo";
-  String formBody = "fileSize=$fileSize&fileCount=$fileCount";
-
+//同步剪切板消息
+Future<void> syncClipBoard(HttpClient client_, String serverIP_, int serverPort_, String? content_) async {
+  String url = "http://$serverIP_:$serverPort_/syncClipBoard";
   HttpClientRequest request = await GlobalVariables.client.postUrl(Uri.parse(url));
-  request.add(utf8.encode(formBody));
+  request.add(utf8.encode(content_!));
   HttpClientResponse response = await request.close();
   String result = await response.transform(utf8.decoder).join();
   //log(result, StackTrace.current);
   if(result == ""){
     log("服务器无返回");
-  } else {
-    //分析服务端响应 如果同意接收则开始发送文件
-    Map resMap = jsonDecode(result);
-    if(resMap['code'] == HttpResponseCode.acceptFile){
-      //preSendFile();
-      if(fileList_.isNotEmpty){
-        for(int i = 0; i < fileList_.length; i++){
-          //若不使用await 则发送多文件时会并发进行从而会让进度条闪烁
-          await sendFile(client_, serverIP_, serverPort_, fileList_[i], i, fileList_.length);
-        }
-      } else {
-        BotToast.showText(text:"无文件内容可发送");
-      }
-    } else {
-      BotToast.showText(text:"对方${GlobalVariables.httpResponseCodeMsg[resMap['code']]!}");
-    }
   }
   //client.close();// 这里若关闭了 就不能再次发送请求了
 }

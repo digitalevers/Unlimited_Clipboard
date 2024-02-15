@@ -7,7 +7,7 @@ import 'package:rabbit_clipboard/common/func.dart';
 import 'package:rabbit_clipboard/common/globalVariable.dart';
 import 'package:rabbit_clipboard/pages/modules/remoteDevices.dart';
 
-class udpServices {
+class UdpServices {
   //UDP广播定时器
   static Timer? timer;
   //探测下线设备定时器
@@ -22,8 +22,7 @@ class udpServices {
       return;
     }
     _startUDPLock = true;
-    GlobalVariables.socket = await RawDatagramSocket.bind(
-        InternetAddress.anyIPv4, GlobalVariables.udpPort);
+    GlobalVariables.socket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, GlobalVariables.udpPort);
     GlobalVariables.socket?.broadcastEnabled = true;
     log('UDP Echo ready to receive', StackTrace.current);
     Duration timeout = Duration(seconds: GlobalVariables.udpBroadInternalTime);
@@ -80,29 +79,7 @@ class udpServices {
             } else {
               if (_json['lanIP'] != GlobalVariables.deviceInfo['lanIP']) {
                 dynamic key = GlobalVariables.remoteDevicesKey;
-                List<Map<String, dynamic>> remote =
-                    key.currentState!.remoteDevicesData;
-                //log(remote, StackTrace.current);
-                bool deviceExist = false;
-                for (int i = 0; i < remote.length; i++) {
-                  if (remote[i]["lanIP"] == _json['lanIP']) {
-                    remote[i]["millTimeStamp"] =
-                        DateTime.now().millisecondsSinceEpoch;
-                    deviceExist = true;
-                    break;
-                  }
-                }
-                if (deviceExist == false) {
-                  key.currentState.setState(() {
-                    Map<String, dynamic> remoteDevice = {
-                      "lanIP": _json["lanIP"],
-                      "deviceType": _json["deviceType"],
-                      "deviceName": _json["deviceName"]
-                    };
-                    remote.add(remoteDevice);
-                  });
-                  log(key.currentState!.remoteDevicesData, StackTrace.current);
-                }
+                key.currentState!.addDeviceItem(_json);
               }
             }
           }
@@ -121,13 +98,13 @@ class udpServices {
           {
             log('RawSocketEvent.closed', StackTrace.current);
             //进程在background太久 socket会被系统关闭 所以这里要手动关闭UDP广播 以便界面resume的时候重启UDP广播
-            udpServices.stopUDP();
+            UdpServices.stopUDP();
           }
           break;
       }
     }, onError: (error) {
       log(error, StackTrace.current);
-      udpServices.stopUDP();
+      UdpServices.stopUDP();
     }, onDone: () {
       GlobalVariables.socket?.close();
     });

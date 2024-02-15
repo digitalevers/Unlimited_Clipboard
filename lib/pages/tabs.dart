@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:rabbit_clipboard/common/commclass.dart';
+import 'package:rabbit_clipboard/services/clipBoard.dart';
+import 'package:rabbit_clipboard/services/server.dart';
 
 import 'tabs/syncDevices.dart';
 import 'tabs/syncHistory.dart';
@@ -63,10 +65,12 @@ class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
       lanIP = "无法获取ip";
     }
     if ((result_['type'] == 'wifi' || result_['type'] == 'ethernet') && lanIP.isNotEmpty) {
-      udpServices.startUDP();
+      UdpServices.startUDP();
+      ClipBoard.startReadClipBoard();
+      Server.startServer();
     } else {
       //由WiFi切换到移动网络下关闭UDP广播
-      udpServices.stopUDP();
+      UdpServices.stopUDP();
     }
     //刷新 headerWidget
     GlobalVariables.headerWidgetKey.currentState?.setState(() {
@@ -88,9 +92,6 @@ class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
     super.initState();
     _initGetInfo();
     //startCleanTimer();
-    //启动HTTP SERVER并传入key 便于在server类中获取context
-    //Server.startServer(sendToAppBodyKey, receiveFilesLogKey);
-    //log("init Tabs", StackTrace.current);
   }
 
   @override

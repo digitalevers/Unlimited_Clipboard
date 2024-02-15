@@ -56,6 +56,8 @@ class GlobalVariables {
   static const int udpPort = 10000;
   //UDP广播频次间隔时间 秒
   static int udpBroadInternalTime = 3;
+  //读取剪切板间隔时间 秒
+  static int readClipBoardInternalTime = 3;
   static RawDatagramSocket? socket;
   //项目官网
   static const String website = "https://rabbit.digitalevers.com";
@@ -74,7 +76,7 @@ class GlobalVariables {
   };
   //远程设备数据
   static const Map<dynamic, dynamic> remoteDevicesData = {};
-  //发送文件的客户端
+  //发送消息的客户端
   static HttpClient client = HttpClient();
   //缓存实例
   static SharedPreferences? prefs;

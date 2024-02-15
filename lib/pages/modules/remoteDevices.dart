@@ -20,17 +20,17 @@ class RemoteDevices extends StatefulWidget {
 
 // ignore: camel_case_types
 class _RemoteDevicesState extends State<RemoteDevices> {
+
   List<Map<String, dynamic>> remoteDevicesData = [
-    //{"lanIP": "192.168.2.3", "deviceName": "airbook", "deviceType": "macos"}
+    //{"lanIP": "192.168.2.3", "deviceName": "airbook", "deviceType": "macos", "syncFlag":true}
   ];
-  final ScrollController _scrollController =
-      ScrollController(); //ListView 滑动控制器
+
+  final ScrollController _scrollController = ScrollController(); //ListView 滑动控制器
 
   @override
   void initState() {
     super.initState();
     _initState();
-
     //界面build完成后执行回调函数
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
@@ -38,8 +38,7 @@ class _RemoteDevicesState extends State<RemoteDevices> {
   }
 
   void _initState() async {
-    //this.remoteDevices = _getBaseName(filesLog);
-    //await prefs!.setStringList("remoteDevices", filesLog);
+
   }
 
   @override
@@ -57,6 +56,78 @@ class _RemoteDevicesState extends State<RemoteDevices> {
               '暂未发现局域网设备',
               style: TextStyle(color: Colors.black),
             )));
+  }
+
+
+  List<Widget> _renderDeviceItem(bool? syncFlag){
+    if(syncFlag == true){
+      return [
+        CustomPaint(
+          painter: ArcPainter(labelTitle: ""),
+          size: const Size(26,26), // 调整大小以适应你的需求
+        ),
+        const Positioned(child: Icon(Icons.sync,size: 16,color: Colors.white)),
+        const Center(child: Text("取消同步",style: TextStyle(color: Colors.white)))
+      ];
+    } else {
+      return [
+        const Center(child: Text("设置同步",style: TextStyle(color: Colors.white)))
+      ];
+    }
+  }
+
+  //add
+  void addDeviceItem(Map<String, dynamic> obj){
+    bool deviceExist = false;
+    for (int i = 0; i < remoteDevicesData.length; i++) {
+      if (remoteDevicesData[i]["lanIP"] == obj['lanIP']) {
+        remoteDevicesData[i]["millTimeStamp"] = DateTime.now().millisecondsSinceEpoch;
+        deviceExist = true;
+        break;
+      }
+    }
+    if (deviceExist == false) {
+      setState(() {
+        Map<String, dynamic> remoteDevice = {
+          "lanIP": obj["lanIP"],
+          "deviceType": obj["deviceType"],
+          "deviceName": obj["deviceName"],
+          "syncFlag": getSyncFlag(obj["lanIP"]),
+          "millTimeStamp": DateTime.now().millisecondsSinceEpoch
+        };
+        remoteDevicesData.add(remoteDevice);
+      });
+      log(remoteDevicesData, StackTrace.current);
+    }
+  }
+
+  //update
+  void updateDeviceItem(int index,String key,dynamic value){
+    setState(() {
+      remoteDevicesData[index][key] = value;
+    });
+    if(key == "syncFlag"){
+      //log(jsonEncode({"syncFlag":value}),StackTrace.current);
+      GlobalVariables.prefs!.setString(remoteDevicesData[index]["lanIP"], jsonEncode({"syncFlag":value}));
+    }
+  }
+
+  //query
+  Map<String,dynamic>? getDeviceItem(String ip){
+    String? value = GlobalVariables.prefs!.getString(ip);
+    //log(value, StackTrace.current);
+    if(value != null){
+      return jsonDecode(value);
+    }
+    return null;
+  }
+
+  bool getSyncFlag(String ip){
+    Map<String,dynamic>? deviceItem = getDeviceItem(ip);
+    if(deviceItem != null){
+      return deviceItem["syncFlag"] ?? true;
+    }
+    return true;
   }
 
   Widget remoteDevicesNotEmpty() {
@@ -80,9 +151,9 @@ class _RemoteDevicesState extends State<RemoteDevices> {
                       //tileColor: const Color(0xffFF9E3D),
                       //selectedTileColor:const Color(0xff1122dd),
                       leading:Icon(
-                          getRemoteDeviceTypeIcon(remoteDevicesData[index]["deviceType"]),
-                          color: const Color.fromARGB(255, 126, 126, 126),
-                        ),
+                        getRemoteDeviceTypeIcon(remoteDevicesData[index]["deviceType"]),
+                        color: const Color.fromARGB(255, 126, 126, 126),
+                      ),
                       //iconColor: Color.fromARGB(255, 134, 134, 134),
                       textColor: const Color.fromARGB(255, 126, 126, 126),
                       //selectedColor:const Color(0xff1122dd),
@@ -95,25 +166,22 @@ class _RemoteDevicesState extends State<RemoteDevices> {
                       subtitle: Text("${remoteDevicesData[index]["lanIP"]!}",style: const TextStyle(fontSize: 12.0,color: Color.fromARGB(255, 126, 126, 126))),
                       trailing: InkWell(
                                 onTap:(){
-                                  BotToast.showText(text: "已取消同步");
+                                  if(remoteDevicesData[index]["syncFlag"] == true){
+                                    updateDeviceItem(index, "syncFlag", false);
+                                    BotToast.showText(text: "已取消同步");
+                                  } else {
+                                    updateDeviceItem(index, "syncFlag", true);
+                                    BotToast.showText(text: "已设置同步");
+                                  }
                                 },
                                 child:Container(
                                   width: 120,
                                   height: double.infinity,
                                   alignment: Alignment.center,
-                                  //child: Text("设为同步设备",style: const TextStyle(color: Color.fromARGB(255, 255, 255, 255))),
-                                  
                                   color:const Color(0xFFFC6621),
                                   child: Stack(
                                     alignment: Alignment.topRight,
-                                    children: [
-                                      CustomPaint(
-                                        painter: ArcPainter(labelTitle: "123"),
-                                        size: const Size(26,26), // 调整大小以适应你的需求
-                                      ),
-                                      const Positioned(child: Icon(Icons.sync,size: 16,color: Colors.white)),
-                                      const Center(child: Text("取消同步",style: TextStyle(color: Color(0xFFe41749))))
-                                    ]
+                                    children: _renderDeviceItem(remoteDevicesData[index]["syncFlag"])
                                   )
                                 )),
                                 
@@ -123,7 +191,9 @@ class _RemoteDevicesState extends State<RemoteDevices> {
       );
   }
 
-  void addRemoteDevice() {}
+  void addRemoteDevice() {
+
+  }
 
   // void insertFilesLog(String fileInfoJson) async {
   //   List<String>? filesLog = prefs!.getStringList("remoteDevices") ?? [];
