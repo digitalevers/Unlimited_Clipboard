@@ -49,7 +49,7 @@ class GlobalVariables {
   //日志开关
   static const bool logDebug = true;
   static const bool useProxy = false;
-  static const String proxy = "10.7.0.158:8888";
+  static const String proxy = "192.168.2.109:8888";
   //http server端口
   static const int httpServerPort = 8888;
   //UDP广播和接收数据端口

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:rabbit_clipboard/common/commclass.dart';
-import 'package:rabbit_clipboard/services/clipBoard.dart';
+import 'package:rabbit_clipboard/services/clipBoardServices.dart';
 import 'package:rabbit_clipboard/services/server.dart';
 
 import 'tabs/syncDevices.dart';
@@ -66,7 +66,7 @@ class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
     }
     if ((result_['type'] == 'wifi' || result_['type'] == 'ethernet') && lanIP.isNotEmpty) {
       UdpServices.startUDP();
-      ClipBoard.startReadClipBoard();
+      ClipBoardServices.startReadClipBoard();
       Server.startServer();
     } else {
       //由WiFi切换到移动网络下关闭UDP广播

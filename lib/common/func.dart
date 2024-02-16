@@ -61,10 +61,6 @@ bool pointInsideRect(Offset point,double top,double left,double itemWidth,double
   return false;
 }
 
-//发送文件的一些修饰工作
-void preSendFile(){
-}
-
 //转换文件大小的规格
 String fommatFileSize(int fileSizeBytes){
   int power = 0;
@@ -99,16 +95,20 @@ Map<String,String>  getFileInfo(String storageOrPrivateUri){
 }
 
 //同步剪切板消息
-Future<void> syncClipBoard(HttpClient client_, String serverIP_, int serverPort_, String? content_) async {
+Future<int> syncClipBoard(HttpClient client_, String serverIP_, int serverPort_, String? content_) async {
   String url = "http://$serverIP_:$serverPort_/syncClipBoard";
   HttpClientRequest request = await GlobalVariables.client.postUrl(Uri.parse(url));
   request.add(utf8.encode(content_!));
   HttpClientResponse response = await request.close();
-  String result = await response.transform(utf8.decoder).join();
-  //log(result, StackTrace.current);
-  if(result == ""){
-    log("服务器无返回");
+  int result = int.parse(await response.transform(utf8.decoder).join());
+  if(result == 1){
+    log("同步成功", StackTrace.current);
+    BotToast.showText(text: "同步成功");
+  } else {
+    log("同步失败", StackTrace.current);
+    BotToast.showText(text: "同步失败");
   }
+  return result;
   //client.close();// 这里若关闭了 就不能再次发送请求了
 }
 

@@ -2,17 +2,16 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_connect/http/src/request/request.dart';
 import 'package:path/path.dart' as p;
 import 'package:rabbit_clipboard/common/func.dart';
 import 'package:rabbit_clipboard/common/globalVariable.dart';
+import 'package:rabbit_clipboard/services/clipBoardServices.dart';
 
 class Server {
   static ServerStatus serverStatus = ServerStatus.idle;
-  static Map<String, Object>? serverInf;
-  //static Map<String, String>? fileList;
+
   static HttpServer? _server;
   //启动httpserver
   static Future<Map<String, dynamic>> startServer() async {
@@ -28,31 +27,35 @@ class Server {
           String baseUri = p.basename(request.requestedUri.toString());
           //log(baseUri,StackTrace.current);
           if (baseUri == "syncClipBoard") {
-            // String os = (request.headers['os']![0]);
-            // String username = request.headers['receiver-name']![0];
-            // //allowRequest = await senderRequestDialog(username, os);
-
-            // if (allowRequest == true) {
-            //   //appending receiver data
-            //   //request.response.write(jsonEncode({'code': _randomSecretCode, 'accepted': true}));
-            //   request.response.close();
-            // } else {
-            //   request.response.write(
-            //     jsonEncode({'code': -1, 'accepted': false}),
-            //   );
-            //   request.response.close();
-            // }
             if (serverStatus == ServerStatus.idle) {
               String jsonString = await request.bytesToString();
-              //log("收到剪切板消息$jsonString", StackTrace.current);
-              Clipboard.setData(ClipboardData(text: jsonString));
-              BotToast.showText(text: "收到剪切板消息");
+              ClipBoardServices.stopReadClipBoard();
+
+              await Clipboard.setData(ClipboardData(text: jsonString)).then((setValue) async {
+                await Clipboard.getData(Clipboard.kTextPlain).then((getValue){
+                  if(getValue?.text != null){
+                    //将内容写入prevContent 防止再次将剪切板内容同步出去
+                    ClipBoardServices.prevContent = jsonString;
+                    //写入缓存
+                    GlobalVariables.prefs!.setString("ClipboardData", jsonString);
+                    BotToast.showText(text: "收到剪切板消息");
+                    //在异步回调中write 必须在最前面加await 否则会报 StreamSink closed
+                    request.response.write(1);
+                  } else {
+                    //应用位于后台无法读写剪切板
+                    request.response.write(0);
+                  }
+                  ClipBoardServices.startReadClipBoard();
+                });
+              });
+
             } else {
               request.response.write(jsonEncode({'code': HttpResponseCode.serverBusy})); //告知客户端 "服务端繁忙"
             }
           } else {
             request.response.write('Request Path denied access');
           }
+          await request.response.flush();
           request.response.close();
         }
       },
