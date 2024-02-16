@@ -30,6 +30,7 @@ class ClipBoardServices {
                       prevContent = null;
                     }
                   });
+                  //TODO 多设备如何判断整体同步成功或失败
                 }
               }
           }
