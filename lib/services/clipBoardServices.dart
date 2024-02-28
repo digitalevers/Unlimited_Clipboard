@@ -49,7 +49,11 @@ class ClipBoardServices {
                     GlobalVariables.prefs!.setString("$lanIP-syncResult", jsonEncode({"syncResult":false}));
                   }
                   GlobalVariables.prefs!.setString("ClipboardData", prevContent!);
-                  BotToast.showText(text: "同步成功$syncSucc台设备\n同步失败$syncFail台设备");
+                  if(syncFail <= 0){
+                    BotToast.showText(text: "同步成功$syncSucc台设备");
+                  } else {
+                    BotToast.showText(text: "同步成功$syncSucc台设备\n同步失败$syncFail台设备\n请打开接收方应用");
+                  }
                 }
               }
             } else {
@@ -68,7 +72,11 @@ class ClipBoardServices {
                     } else {
                       ++syncFail;
                     }
-                    BotToast.showText(text: "同步成功$syncSucc台设备\n同步失败$syncFail台设备");
+                    if(syncFail <= 0){
+                      BotToast.showText(text: "同步成功$syncSucc台设备");
+                    } else {
+                      BotToast.showText(text: "同步成功$syncSucc台设备\n同步失败$syncFail台设备\n请打开接收方应用");
+                    }
                   }
                 }
               }
