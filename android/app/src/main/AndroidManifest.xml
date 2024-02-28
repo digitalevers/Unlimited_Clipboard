@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.rabbit_clipboard">
+    package="com.digitalevers.rabbit_clipboard">
    <application
-        android:label="rabbit_clipboard"
+        android:label="脱兔剪切板"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

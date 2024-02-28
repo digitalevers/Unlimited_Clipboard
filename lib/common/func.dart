@@ -101,13 +101,7 @@ Future<int> syncClipBoard(HttpClient client_, String serverIP_, int serverPort_,
   request.add(utf8.encode(content_!));
   HttpClientResponse response = await request.close();
   int result = int.parse(await response.transform(utf8.decoder).join());
-  if(result == 1){
-    log("同步成功", StackTrace.current);
-    BotToast.showText(text: "同步成功");
-  } else {
-    log("同步失败", StackTrace.current);
-    BotToast.showText(text: "同步失败");
-  }
+  //result 1 同步成功 0 同步失败
   return result;
   //client.close();// 这里若关闭了 就不能再次发送请求了
 }
