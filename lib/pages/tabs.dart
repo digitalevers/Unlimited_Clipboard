@@ -64,6 +64,7 @@ class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
     }
     if ((result_['type'] == 'wifi' || result_['type'] == 'ethernet') && lanIP.isNotEmpty) {
       UdpServices.startUDP();
+      UdpServices.startCleanTimer();
       ClipBoardServices.startReadClipBoard();
       Server.startServer();
     } else {
@@ -88,7 +89,6 @@ class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    //startCleanTimer();
   }
 
   @override
@@ -108,7 +108,6 @@ class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
     bool allowPrivacy = GlobalVariables.prefs?.getBool("allowPrivacy") ?? false;
     if (allowPrivacy) {
       _initGetInfo();
-
       //置于initState中只会执行一次
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Future.delayed(const Duration(milliseconds: 1500), () {

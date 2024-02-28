@@ -86,6 +86,7 @@ class _RemoteDevicesState extends State<RemoteDevices> {
         break;
       }
     }
+    //新设备加入
     if (deviceExist == false) {
       setState(() {
         Map<String, dynamic> remoteDevice = {
@@ -111,6 +112,8 @@ class _RemoteDevicesState extends State<RemoteDevices> {
       GlobalVariables.prefs!.setString(remoteDevicesData[index]["lanIP"], jsonEncode({"syncFlag":value}));
     }
   }
+
+  
 
   //query
   Map<String,dynamic>? getDeviceItem(String ip){
@@ -191,9 +194,6 @@ class _RemoteDevicesState extends State<RemoteDevices> {
       );
   }
 
-  void addRemoteDevice() {
-
-  }
 
   // void insertFilesLog(String fileInfoJson) async {
   //   List<String>? filesLog = prefs!.getStringList("remoteDevices") ?? [];

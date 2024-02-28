@@ -56,6 +56,8 @@ class GlobalVariables {
   static const int udpPort = 10000;
   //UDP广播频次间隔时间 秒
   static int udpBroadInternalTime = 3;
+  //清理下线设备定时器间隔时间
+  static int cleanInternalTime = 3 * udpBroadInternalTime;
   //读取剪切板间隔时间 秒
   static int readClipBoardInternalTime = 3;
   static RawDatagramSocket? socket;

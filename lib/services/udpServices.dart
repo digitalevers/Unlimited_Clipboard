@@ -2,10 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/widgets.dart';
 import 'package:rabbit_clipboard/common/func.dart';
 import 'package:rabbit_clipboard/common/globalVariable.dart';
-import 'package:rabbit_clipboard/pages/modules/remoteDevices.dart';
 
 class UdpServices {
   //UDP广播定时器
@@ -56,7 +54,7 @@ class UdpServices {
             var decoder = const Utf8Decoder();
             String msg = decoder.convert(udpData.data); // 将UTF8数据解码
             //String msg = String.fromCharCodes(udpData.data);
-            //print('收到来自${udpData.address.toString()}:${udpData.port}的数据：${udpData.data.length}字节数据 内容:$msg');
+            print('收到来自${udpData.address.toString()}:${udpData.port}的数据：${udpData.data.length}字节数据 内容:$msg');
             //print('Datagram from ${udpData.address.address}:${udpData.port}: ${msg.trim()}');
             //socket.send(msg.codeUnits, d.address, d.port);
 
@@ -129,4 +127,37 @@ class UdpServices {
     //关闭UDP广播定时器
     timer?.cancel();
   }
+
+  //启动"清理下线设备"定时器 每隔 cleanInternalTime 秒清理一次下线设备(注意毫秒单位)
+  static void startCleanTimer() {
+    dynamic key = GlobalVariables.remoteDevicesKey;
+    List<Map<String, dynamic>> remoteDevicesData_ = key.currentState!.remoteDevicesData;
+    Duration timeout = Duration(seconds: GlobalVariables.cleanInternalTime);
+    cleanTimer = Timer.periodic(timeout, (cleanTimer) {
+      if (remoteDevicesData_.isNotEmpty) {
+        int now = DateTime.now().millisecondsSinceEpoch;
+        // 这样删除会引起 Concurrent modification during iteration
+        // remoteDevicesData_.forEach((key, value) {
+        //   if(now - value['millTimeStamp'] >= 5000){
+        //     //超过5000毫秒没有更新时间戳的默认为下线设备并将其清理
+        //     remoteDevicesData_.removeWhere(key);
+        //   }
+        // });
+        remoteDevicesData_.removeWhere((remoteDeviceInfo) {
+          if (now - remoteDeviceInfo['millTimeStamp'] >= GlobalVariables.cleanInternalTime * 1000) {
+            return true;
+          } else {
+            return false;
+          }
+        });
+        key.currentState!.setState(() {});
+      }
+    });
+  }
+
+  //关闭"清理下线设备"定时器
+  void stopCleanTimer() {
+    cleanTimer?.cancel();
+  }
+
 }
