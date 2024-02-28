@@ -106,29 +106,27 @@ class _PrivacyPageState extends State<PrivacyPage> {
                       child: Row(
                         children: [
                           Expanded(
-                              child: GestureDetector(
-                            child: Container(
-                                alignment: Alignment.center,
-                                child: const Text('不同意')),
-                            onTap: () {
-                              SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-                            },
+                            child: GestureDetector(
+                              child: Container(alignment: Alignment.center,child: const Text('不同意')),
+                              onTap: () {
+                                SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                              },
                           )),
                           const VerticalDivider(
                             width: 1,
                           ),
                           Expanded(
                               child: GestureDetector(
-                            child: Container(
-                                alignment: Alignment.center,
-                                color: Theme.of(context).primaryColor,
-                                child: const Text('同意',style:TextStyle(color: Colors.white))),
-                            onTap: () async {
-                              await GlobalVariables.prefs?.setBool("allowPrivacy",true);
-                              //关闭弹窗
-                              Navigator.pop(context);
-                              //TabsKey.currentState!.setState(() {});
-                            },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  color: Theme.of(context).primaryColor,
+                                  child: const Text('同意',style:TextStyle(color: Colors.white))),
+                                onTap: () async {
+                                  await GlobalVariables.prefs?.setBool("allowPrivacy",true);
+                                  //关闭弹窗
+                                  Navigator.pop(context);
+                                  GlobalVariables.tabsKey.currentState!.setState(() {});
+                                },
                           )),
                         ],
                       ),

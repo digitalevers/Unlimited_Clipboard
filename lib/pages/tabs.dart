@@ -27,8 +27,6 @@ class Tabs extends StatefulWidget {
 class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
   //默认显示的tab index
   int _currentIndex = 0;
-  List<Map<String, String>> chooseFiles = [];
-  String showShortFileName = '';
   final List<Widget> _pages = [
     const SyncDevices(),
     const SyncHistory(),
@@ -90,7 +88,6 @@ class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _initGetInfo();
     //startCleanTimer();
   }
 
@@ -110,6 +107,8 @@ class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     bool allowPrivacy = GlobalVariables.prefs?.getBool("allowPrivacy") ?? false;
     if (allowPrivacy) {
+      _initGetInfo();
+
       //置于initState中只会执行一次
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Future.delayed(const Duration(milliseconds: 1500), () {

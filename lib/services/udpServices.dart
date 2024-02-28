@@ -78,6 +78,7 @@ class UdpServices {
               // });
             } else {
               if (_json['lanIP'] != GlobalVariables.deviceInfo['lanIP']) {
+                log("123");
                 dynamic key = GlobalVariables.remoteDevicesKey;
                 key.currentState!.addDeviceItem(_json);
               }

@@ -1,9 +1,7 @@
 import 'dart:io';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 //import 'package:path_provider/path_provider.dart';
-import 'package:rabbit_clipboard/pages/modules/privacyPage.dart';
 import 'pages/tabs.dart';
 
 import 'common/func.dart';
@@ -32,8 +30,7 @@ void main() async {
     HttpOverrides.global = MyHttpOverrides(); // 使用自己的HttpOverrides
   }
   // 屏幕顶部状态栏设置为透明（沉浸式）
-  SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(statusBarColor: Colors.blue));
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: Colors.blue));
   runApp(const MyApp());
 }
 
