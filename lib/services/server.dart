@@ -18,7 +18,7 @@ class Server {
     try {
       _server = await HttpServer.bind('0.0.0.0', GlobalVariables.httpServerPort);
     } catch (e) {
-      BotToast.showText(text: "启动 server 失败");
+      BotToast.showText(text: "启动Server失败");
       return {'hasErr': true, 'type': 'server', 'errMsg': '$e'};
     }
 

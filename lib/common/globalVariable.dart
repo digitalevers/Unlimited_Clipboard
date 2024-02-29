@@ -51,7 +51,7 @@ class GlobalVariables {
   static const bool useProxy = false;
   static const String proxy = "192.168.2.109:8888";
   //http server端口
-  static const int httpServerPort = 8888;
+  static const int httpServerPort = 8889;
   //UDP广播和接收数据端口
   static const int udpPort = 10000;
   //UDP广播频次间隔时间 秒
