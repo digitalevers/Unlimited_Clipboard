@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rabbit_clipboard/common/globalVariable.dart';
 import 'package:rabbit_clipboard/common/globalWidget.dart';
+import 'package:rabbit_clipboard/pages/modules/syncLog.dart';
 
 class SyncHistory extends StatefulWidget {
   const SyncHistory({super.key});
@@ -15,7 +16,7 @@ class _SyncHistoryState extends State<SyncHistory> {
     return Column(
       children: [
         headerWidget(key: GlobalVariables.headerWidgetKey),
-        
+        syncLog()
       ],
     );
   }

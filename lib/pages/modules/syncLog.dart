@@ -12,7 +12,7 @@ import 'package:rabbit_clipboard/common/globalVariable.dart';
 
 //组件单独放在一个文件里则无法访问到 _syncLogState 该类为文件私有
 class syncLog extends StatefulWidget {
-  const syncLog(Key key) : super(key: key);
+  const syncLog({super.key});
 
   @override
   State<syncLog> createState() => _syncLogState();
