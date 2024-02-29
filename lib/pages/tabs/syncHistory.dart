@@ -16,7 +16,7 @@ class _SyncHistoryState extends State<SyncHistory> {
     return Column(
       children: [
         headerWidget(key: GlobalVariables.headerWidgetKey),
-        syncLog()
+        syncLog(key: GlobalVariables.syncLogKey)
       ],
     );
   }

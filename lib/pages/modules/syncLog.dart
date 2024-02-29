@@ -17,7 +17,7 @@ class syncLog extends StatefulWidget {
 // ignore: camel_case_types
 class _syncLogState extends State<syncLog> {
   //读取pref获取同步记录
-  List<String> syncLogData = GlobalVariables.prefs!.getStringList("syncLog") ?? [];
+  List<String> syncLogData = [];
 
   final ScrollController _scrollController = ScrollController(); //ListView 滑动控制器
 
@@ -32,11 +32,12 @@ class _syncLogState extends State<syncLog> {
   }
 
   void _initState() async {
-    
+
   }
 
   @override
   Widget build(BuildContext context) {
+    syncLogData = GlobalVariables.prefs!.getStringList("syncLog") ?? [];
     return syncLogData.isEmpty ? syncLogIsEmpty() : syncLogNotEmpty();
   }
 

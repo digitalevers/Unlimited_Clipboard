@@ -30,7 +30,7 @@ class Server {
           if (baseUri == "syncClipBoard") {
             if (serverStatus == ServerStatus.idle) {
               String jsonString = await request.bytesToString();
-              //暂停读取剪切板 防止再次同步出去
+              //暂停轮询读取剪切板 防止再次同步出去
               ClipBoardServices.stopReadClipBoard();
               await Clipboard.setData(ClipboardData(text: jsonString)).then((setValue) async {
                 await Clipboard.getData(Clipboard.kTextPlain).then((getValue){
@@ -46,8 +46,12 @@ class Server {
                     if(syncLog.length > GlobalVariables.syncLogLimitCount){
                       syncLog.removeAt(0);
                     }
-                    GlobalVariables.prefs!.setStringList("syncLog",syncLog);
-                    BotToast.showText(text: "收到剪切板消息");
+                    GlobalVariables.prefs!.setStringList("syncLog",syncLog).then((_){
+                      //更新UI
+                      //log("gengxinui",StackTrace.current);
+                      GlobalVariables.syncLogKey.currentState?.setState(() {});
+                      BotToast.showText(text: "收到剪切板消息");
+                    });
                     //在异步回调中write 必须在最前面加await 否则会报 StreamSink closed
                     request.response.write(1);
                   } else {
