@@ -1,7 +1,6 @@
 import 'dart:io';
-import 'package:connectivity_plus/connectivity_plus.dart';
+import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:rabbit_clipboard/common/commclass.dart';
 import 'package:rabbit_clipboard/common/func.dart';
 import 'package:rabbit_clipboard/common/globalVariable.dart';
 
@@ -22,7 +21,9 @@ class _headerWidgetState extends State<headerWidget> {
 
   EdgeInsets paddingDiff() {
     if (Platform.isIOS || Platform.isAndroid) {
-      return const EdgeInsets.fromLTRB(0, 20, 0, 10);
+      //手机状态栏高度
+      double top = MediaQueryData.fromWindow(window).padding.top;
+      return EdgeInsets.fromLTRB(0, top, 0, 10);
     } else {
       return const EdgeInsets.fromLTRB(0, 10, 0, 10);
     }
@@ -39,8 +40,7 @@ class _headerWidgetState extends State<headerWidget> {
             Row(
               children: [
                 Icon(
-                  getRemoteDeviceTypeIcon(
-                      GlobalVariables.deviceInfo['deviceType']),
+                  getRemoteDeviceTypeIcon(GlobalVariables.deviceInfo['deviceType']),
                   size: 16,
                   color: Colors.white,
                 ),
