@@ -1,7 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:math';
-
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter/services.dart';
@@ -20,10 +16,8 @@ class syncLog extends StatefulWidget {
 
 // ignore: camel_case_types
 class _syncLogState extends State<syncLog> {
-
-  List<Map<String, dynamic>> syncLogData = [
-    //{"lanIP": "192.168.2.3", "deviceName": "airbook", "deviceType": "macos", "syncFlag":true}
-  ];
+  //读取pref获取同步记录
+  List<String> syncLogData = GlobalVariables.prefs!.getStringList("syncLog") ?? [];
 
   final ScrollController _scrollController = ScrollController(); //ListView 滑动控制器
 
@@ -38,7 +32,7 @@ class _syncLogState extends State<syncLog> {
   }
 
   void _initState() async {
-
+    
   }
 
   @override
@@ -62,61 +56,43 @@ class _syncLogState extends State<syncLog> {
 
 
   //add
-  void addDeviceItem(Map<String, dynamic> obj){
-    bool deviceExist = false;
-    for (int i = 0; i < syncLogData.length; i++) {
-      if (syncLogData[i]["lanIP"] == obj['lanIP']) {
-        syncLogData[i]["millTimeStamp"] = DateTime.now().millisecondsSinceEpoch;
-        deviceExist = true;
-        break;
-      }
-    }
-    //新设备加入
-    if (deviceExist == false) {
-      setState(() {
-        Map<String, dynamic> remoteDevice = {
-          "lanIP": obj["lanIP"],
-          "deviceType": obj["deviceType"],
-          "deviceName": obj["deviceName"],
-          "syncFlag": getSyncFlag(obj["lanIP"]),
-          "millTimeStamp": DateTime.now().millisecondsSinceEpoch
-        };
-        syncLogData.add(remoteDevice);
-      });
-      log(syncLogData, StackTrace.current);
-    }
-  }
+  // void addDeviceItem(Map<String, dynamic> obj){
+  //   bool deviceExist = false;
+  //   for (int i = 0; i < syncLogData.length; i++) {
+  //     if (syncLogData[i]["lanIP"] == obj['lanIP']) {
+  //       syncLogData[i]["millTimeStamp"] = DateTime.now().millisecondsSinceEpoch;
+  //       deviceExist = true;
+  //       break;
+  //     }
+  //   }
+  //   //新设备加入
+  //   if (deviceExist == false) {
+  //     setState(() {
+  //       Map<String, dynamic> remoteDevice = {
+  //         "lanIP": obj["lanIP"],
+  //         "deviceType": obj["deviceType"],
+  //         "deviceName": obj["deviceName"],
+  //         "syncFlag": getSyncFlag(obj["lanIP"]),
+  //         "millTimeStamp": DateTime.now().millisecondsSinceEpoch
+  //       };
+  //       syncLogData.add(remoteDevice);
+  //     });
+  //     log(syncLogData, StackTrace.current);
+  //   }
+  // }
 
-  //update
-  void updateDeviceItem(int index,String key,dynamic value){
-    setState(() {
-      syncLogData[index][key] = value;
-    });
-    if(key == "syncFlag"){
-      //log(jsonEncode({"syncFlag":value}),StackTrace.current);
-      GlobalVariables.prefs!.setString(syncLogData[index]["lanIP"], jsonEncode({"syncFlag":value}));
-    }
-  }
+  // //update
+  // void updateDeviceItem(int index,String key,dynamic value){
+  //   setState(() {
+  //     syncLogData[index][key] = value;
+  //   });
+  //   if(key == "syncFlag"){
+  //     //log(jsonEncode({"syncFlag":value}),StackTrace.current);
+  //     GlobalVariables.prefs!.setString(syncLogData[index]["lanIP"], jsonEncode({"syncFlag":value}));
+  //   }
+  // }
 
-  
 
-  //query
-  Map<String,dynamic>? getDeviceItem(String ip){
-    String? value = GlobalVariables.prefs!.getString(ip);
-    //log(value, StackTrace.current);
-    if(value != null){
-      return jsonDecode(value);
-    }
-    return null;
-  }
-
-  bool getSyncFlag(String ip){
-    Map<String,dynamic>? deviceItem = getDeviceItem(ip);
-    if(deviceItem != null){
-      return deviceItem["syncFlag"] ?? true;
-    }
-    return true;
-  }
 
   Widget syncLogNotEmpty() {
     return Expanded(child: 
@@ -135,13 +111,13 @@ class _syncLogState extends State<syncLog> {
                   color: const Color.fromARGB(255, 255, 255, 255),
                   child: ListTile(
                       //dense:false,
-                      contentPadding: const EdgeInsets.all(0),
+                      contentPadding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                       //tileColor: const Color(0xffFF9E3D),
                       //selectedTileColor:const Color(0xff1122dd),
-                      leading:Icon(
-                        getRemoteDeviceTypeIcon(syncLogData[index]["deviceType"]),
-                        color: const Color.fromARGB(255, 126, 126, 126),
-                      ),
+                      // leading:Icon(
+                      //   getRemoteDeviceTypeIcon(syncLogData[index]["deviceType"]),
+                      //   color: const Color.fromARGB(255, 126, 126, 126),
+                      // ),
                       //iconColor: Color.fromARGB(255, 134, 134, 134),
                       textColor: const Color.fromARGB(255, 126, 126, 126),
                       //selectedColor:const Color(0xff1122dd),
@@ -150,8 +126,8 @@ class _syncLogState extends State<syncLog> {
                       //splashColor: Color.fromARGB(255, 62, 204, 44),
 
                       isThreeLine: false,
-                      title: Text(syncLogData[index]["deviceName"]),
-                      subtitle: Text("${syncLogData[index]["lanIP"]!}",style: const TextStyle(fontSize: 12.0,color: Color.fromARGB(255, 126, 126, 126))),      
+                      title: Text(syncLogData[index]),
+                      //subtitle: Text("${syncLogData[index]["lanIP"]!}",style: const TextStyle(fontSize: 12.0,color: Color.fromARGB(255, 126, 126, 126))),      
                     )
               );
             },

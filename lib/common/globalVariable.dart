@@ -60,6 +60,8 @@ class GlobalVariables {
   static int cleanInternalTime = 3 * udpBroadInternalTime;
   //读取剪切板间隔时间 秒
   static int readClipBoardInternalTime = 3;
+  //同步记录数上限
+  static int syncLogLimitCount = 10;
   static RawDatagramSocket? socket;
   //项目官网
   static const String website = "https://rabbit.digitalevers.com";

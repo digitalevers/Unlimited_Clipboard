@@ -29,8 +29,8 @@ class Server {
           if (baseUri == "syncClipBoard") {
             if (serverStatus == ServerStatus.idle) {
               String jsonString = await request.bytesToString();
+              //暂停读取剪切板 防止再次同步出去
               ClipBoardServices.stopReadClipBoard();
-
               await Clipboard.setData(ClipboardData(text: jsonString)).then((setValue) async {
                 await Clipboard.getData(Clipboard.kTextPlain).then((getValue){
                   if(getValue?.text != null){
@@ -38,6 +38,14 @@ class Server {
                     ClipBoardServices.prevContent = jsonString;
                     //写入缓存
                     GlobalVariables.prefs!.setString("ClipboardData", jsonString);
+                    //写入同步记录
+                    List<String> syncLog = GlobalVariables.prefs!.getStringList("syncLog") ?? [];
+                    syncLog.add(jsonString);
+                    //限制同步记录数
+                    if(syncLog.length > GlobalVariables.syncLogLimitCount){
+                      syncLog.removeAt(0);
+                    }
+                    GlobalVariables.prefs!.setStringList("syncLog",syncLog);
                     BotToast.showText(text: "收到剪切板消息");
                     //在异步回调中write 必须在最前面加await 否则会报 StreamSink closed
                     request.response.write(1);
@@ -45,6 +53,7 @@ class Server {
                     //应用位于后台无法读写剪切板
                     request.response.write(0);
                   }
+                  //重启读取剪切板
                   ClipBoardServices.startReadClipBoard();
                 });
               });

@@ -42,19 +42,19 @@ class _RemoteDevicesState extends State<RemoteDevices> {
   }
 
   void _initState() async {
-    UdpServices.startUDP();
-    UdpServices.startCleanTimer();
-    ClipBoardServices.startReadClipBoard();
-    Server.startServer();
+    //UdpServices.startUDP();
+    //UdpServices.startCleanTimer();
+    //ClipBoardServices.startReadClipBoard();
+    //Server.startServer();
   }
 
   @override
   void deactivate() {
     super.deactivate();
-    UdpServices.stopUDP();
-    UdpServices.stopCleanTimer();
-    ClipBoardServices.stopReadClipBoard();
-    Server.stopServer();
+    //UdpServices.stopUDP();
+    //UdpServices.stopCleanTimer();
+    //ClipBoardServices.stopReadClipBoard();
+    //Server.stopServer();
   }
 
   @override
