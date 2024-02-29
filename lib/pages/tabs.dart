@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:rabbit_clipboard/common/commclass.dart';
+import 'package:rabbit_clipboard/common/func.dart';
 import 'package:rabbit_clipboard/services/clipBoardServices.dart';
 import 'package:rabbit_clipboard/services/server.dart';
 
@@ -51,17 +53,20 @@ class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
   Future<void> _listenConnectivityChanged(ConnectivityResult result) async {
     Map result_ = await DeviceInfoApi.parseNetworkInfoResult(result);
     //log(result_, StackTrace.current);
-    String networkText, lanIP;
+    String networkText, lanIP, lanIPText;
     if (result_['type'] == 'nowifi') {
       networkText = '未接入WiFi';
     } else {
       networkText = result_['wifiName'];
     }
-    //由移动网络切换到WiFi下继续启动UDP广播
     lanIP = await DeviceInfoApi.getDeviceLocalIP();
-    if (lanIP.isEmpty) {
-      lanIP = "无法获取ip";
-    }
+    lanIPText = lanIP.isEmpty ? "无法获取ip" : lanIP;
+    //全局变量赋值
+    GlobalVariables.deviceInfo['networkText'] = networkText;
+    GlobalVariables.deviceInfo['networkType'] = result_['type'];
+    GlobalVariables.deviceInfo['lanIP'] = lanIP;
+    GlobalVariables.deviceInfo['lanIPText'] = lanIPText;
+
     if ((result_['type'] == 'wifi' || result_['type'] == 'ethernet') && lanIP.isNotEmpty) {
       UdpServices.startUDP();
       UdpServices.startCleanTimer();
@@ -72,10 +77,7 @@ class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
       UdpServices.stopUDP();
     }
     //刷新 headerWidget
-    GlobalVariables.headerWidgetKey.currentState?.setState(() {
-      GlobalVariables.deviceInfo['networkText'] = networkText;
-      GlobalVariables.deviceInfo['lanIP'] = lanIP;
-    });
+    GlobalVariables.headerWidgetKey.currentState?.setState(() {});
   }
 
   // void initEnv() {

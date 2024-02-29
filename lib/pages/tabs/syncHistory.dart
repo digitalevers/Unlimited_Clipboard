@@ -14,7 +14,8 @@ class _SyncHistoryState extends State<SyncHistory> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        headerWidget(key: GlobalVariables.headerWidgetKey)
+        headerWidget(key: GlobalVariables.headerWidgetKey),
+        
       ],
     );
   }

@@ -66,9 +66,11 @@ class GlobalVariables {
   //本地设备和网络信息
   static Map<String, String> deviceInfo = {
     "model": "...",
-    "lanIP": "...",
-    "networkText": "...",
-    "deviceType": "..."
+    "lanIPText": "...",
+    "networkText": ".",
+    "deviceType": "...",
+    "networkType":"",
+    "lanIP":""
   };
   //服务器返回标识
   static const Map<int, String> httpResponseCodeMsg = {
@@ -82,8 +84,8 @@ class GlobalVariables {
   static HttpClient client = HttpClient();
   //缓存实例
   static SharedPreferences? prefs;
-  //待发送文件列表
-  static List<Map<String, String>> fileList = [];
+
+  //static List<Map<String, String>> fileList = [];
   static final GlobalKey tabsKey = GlobalKey();
   static final GlobalKey<NavigatorState> nav = GlobalKey<NavigatorState>();
   static final GlobalKey headerWidgetKey = GlobalKey();

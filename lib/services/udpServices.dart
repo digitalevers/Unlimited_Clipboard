@@ -19,6 +19,7 @@ class UdpServices {
     if (_startUDPLock == true || GlobalVariables.deviceInfo['lanIP']!.isEmpty) {
       return;
     }
+
     _startUDPLock = true;
     GlobalVariables.socket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, GlobalVariables.udpPort);
     GlobalVariables.socket?.broadcastEnabled = true;
@@ -54,7 +55,7 @@ class UdpServices {
             var decoder = const Utf8Decoder();
             String msg = decoder.convert(udpData.data); // 将UTF8数据解码
             //String msg = String.fromCharCodes(udpData.data);
-            print('收到来自${udpData.address.toString()}:${udpData.port}的数据：${udpData.data.length}字节数据 内容:$msg');
+            //print('收到来自${udpData.address.toString()}:${udpData.port}的数据：${udpData.data.length}字节数据 内容:$msg');
             //print('Datagram from ${udpData.address.address}:${udpData.port}: ${msg.trim()}');
             //socket.send(msg.codeUnits, d.address, d.port);
 
@@ -77,7 +78,7 @@ class UdpServices {
             } else {
               if (_json['lanIP'] != GlobalVariables.deviceInfo['lanIP']) {
                 dynamic key = GlobalVariables.remoteDevicesKey;
-                key.currentState!.addDeviceItem(_json);
+                key.currentState?.addDeviceItem(_json);
               }
             }
           }
@@ -150,13 +151,13 @@ class UdpServices {
             return false;
           }
         });
-        key.currentState!.setState(() {});
+        key.currentState?.setState(() {});
       }
     });
   }
 
   //关闭"清理下线设备"定时器
-  void stopCleanTimer() {
+  static void stopCleanTimer() {
     cleanTimer?.cancel();
   }
 

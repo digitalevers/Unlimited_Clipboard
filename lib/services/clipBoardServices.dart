@@ -17,7 +17,7 @@ class ClipBoardServices {
           //log(value?.text,StackTrace.current);
           if(value?.text != null){
             dynamic key = GlobalVariables.remoteDevicesKey;
-            int remoteDevicesDataLength = key.currentState!.remoteDevicesData.length;
+            int remoteDevicesDataLength = key.currentState == null ? 0 : key.currentState.remoteDevicesData.length;
             //同步成功设备数
             int syncSucc = 0;
             //同步失败设备数

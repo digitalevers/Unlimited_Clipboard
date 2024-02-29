@@ -9,6 +9,9 @@ import 'package:path/path.dart' as p;
 
 import 'package:rabbit_clipboard/common/func.dart';
 import 'package:rabbit_clipboard/common/globalVariable.dart';
+import 'package:rabbit_clipboard/services/clipBoardServices.dart';
+import 'package:rabbit_clipboard/services/server.dart';
+import 'package:rabbit_clipboard/services/udpServices.dart';
 
 //组件单独放在一个文件里则无法访问到 _RemoteDevicesState 该类为文件私有
 class RemoteDevices extends StatefulWidget {
@@ -33,12 +36,25 @@ class _RemoteDevicesState extends State<RemoteDevices> {
     _initState();
     //界面build完成后执行回调函数
     // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    //   //_scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    //   log("remoteDevices渲染完成");
     // });
   }
 
   void _initState() async {
+    UdpServices.startUDP();
+    UdpServices.startCleanTimer();
+    ClipBoardServices.startReadClipBoard();
+    Server.startServer();
+  }
 
+  @override
+  void deactivate() {
+    super.deactivate();
+    UdpServices.stopUDP();
+    UdpServices.stopCleanTimer();
+    ClipBoardServices.stopReadClipBoard();
+    Server.stopServer();
   }
 
   @override
@@ -98,7 +114,7 @@ class _RemoteDevicesState extends State<RemoteDevices> {
         };
         remoteDevicesData.add(remoteDevice);
       });
-      log(remoteDevicesData, StackTrace.current);
+      //log(remoteDevicesData, StackTrace.current);
     }
   }
 

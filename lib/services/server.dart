@@ -67,12 +67,11 @@ class Server {
     };
   }
 
-  // static closeServer(context) async {
-  //   try {
-  //     await _server.close();
-  //     await FileMethods.clearCache();
-  //   } catch (e) {
-  //     showSnackBar(context, 'Server not started yet');
-  //   }
-  // }
+  static stopServer() async {
+    try {
+      await _server?.close();
+    } catch (e) {
+      BotToast.showText(text: "Server not started yet");
+    }
+  }
 }

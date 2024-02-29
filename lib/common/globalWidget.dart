@@ -58,7 +58,7 @@ class _headerWidgetState extends State<headerWidget> {
                   color: Colors.white,
                 ),
                 Text(
-                  GlobalVariables.deviceInfo['lanIP']!,
+                  GlobalVariables.deviceInfo['lanIPText']!,
                   style: const TextStyle(color: Colors.white),
                 )
               ],
