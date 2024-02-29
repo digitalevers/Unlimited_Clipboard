@@ -97,12 +97,18 @@ Map<String,String>  getFileInfo(String storageOrPrivateUri){
 //同步剪切板消息
 Future<int> syncClipBoard(HttpClient client_, String serverIP_, int serverPort_, String? content_) async {
   String url = "http://$serverIP_:$serverPort_/syncClipBoard";
-  HttpClientRequest request = await GlobalVariables.client.postUrl(Uri.parse(url));
-  request.add(utf8.encode(content_!));
-  HttpClientResponse response = await request.close();
-  int result = int.parse(await response.transform(utf8.decoder).join());
-  //result 1 同步成功 0 同步失败
-  return result;
+  //log(url,StackTrace.current);
+  try{
+    HttpClientRequest request = await GlobalVariables.client.postUrl(Uri.parse(url));
+    request.add(utf8.encode(content_!));
+    HttpClientResponse response = await request.close();
+    int result = int.parse(await response.transform(utf8.decoder).join());
+    //result 1 同步成功 0 同步失败
+    return result;
+  } catch(error,stack){
+    log(error,StackTrace.current);
+    return 0;
+  }
   //client.close();// 这里若关闭了 就不能再次发送请求了
 }
 
