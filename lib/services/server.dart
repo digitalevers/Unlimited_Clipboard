@@ -48,7 +48,7 @@ class Server {
                     }
                     GlobalVariables.prefs!.setStringList("syncLog",syncLog).then((_){
                       //更新UI
-                      //log("gengxinui",StackTrace.current);
+                      //log("update ui",StackTrace.current);
                       GlobalVariables.syncLogKey.currentState?.setState(() {});
                       BotToast.showText(text: "收到剪切板消息");
                     });
