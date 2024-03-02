@@ -18,8 +18,10 @@ class Server {
     try {
       _server = await HttpServer.bind('0.0.0.0', GlobalVariables.httpServerPort);
     } catch (e) {
-      BotToast.showText(text: "启动Server失败,$e",duration:const Duration(seconds: 10));
-      log(e,StackTrace.current);
+      //iOS 安装release版报错“启动失败 The shared flag to bind() needs to be true if binding multiple times on the same。。。“
+      //但实际上 http server已经启动
+      //BotToast.showText(text: "启动Server失败,$e",duration:const Duration(seconds: 10));
+      //log(e,StackTrace.current);
       return {'hasErr': true, 'type': 'server', 'errMsg': '$e'};
     }
 
