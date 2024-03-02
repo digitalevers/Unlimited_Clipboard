@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "rabbit_clipboard" "\0"
+            VALUE "FileDescription", "脱兔剪切板" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "rabbit_clipboard" "\0"
+            VALUE "InternalName", "脱兔剪切板" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "rabbit_clipboard.exe" "\0"
-            VALUE "ProductName", "rabbit_clipboard" "\0"
+            VALUE "OriginalFilename", "脱兔剪切板.exe" "\0"
+            VALUE "ProductName", "脱兔剪切板" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

@@ -68,7 +68,8 @@ class DeviceInfoApi {
   //Android 10使用NetworkInterface无法获取ipv4地址?！ 使用network_info_plus则可以获取ipv4地址
   static Future getDeviceLocalIP() async {
     RegExp ipv4Exp = RegExp(r"((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}"); //正则匹配ipv4地址
-    await NetworkInterface.list(includeLoopback: false, type: InternetAddressType.any).then((List<NetworkInterface> interfaces) {
+    await NetworkInterface.list(includeLoopback: false, type: InternetAddressType.any).then(
+      (List<NetworkInterface> interfaces) {
         for (NetworkInterface interface in interfaces) {
           //print(interface); //过滤网桥ip
           if (!interface.name.toLowerCase().contains("lxdbr") && !interface.name.toLowerCase().contains("docker") && !interface.name.toLowerCase().contains("lo")) {
