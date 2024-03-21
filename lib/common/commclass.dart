@@ -4,6 +4,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:network_info_plus/network_info_plus.dart';
+import 'package:rabbit_clipboard/common/func.dart';
 
 /////
 /////定义一些通用类
@@ -97,19 +98,19 @@ class DeviceInfoApi {
   static Future getNetworkInfo(Function func) async {
     //判断网络类型
     final Connectivity connectivity = Connectivity();
-    ConnectivityResult result = await connectivity.checkConnectivity();
+    List<ConnectivityResult> result = await connectivity.checkConnectivity();
     //StreamSubscription<ConnectivityResult> connectivitySubscription =
-    connectivity.onConnectivityChanged.listen(func as void Function(ConnectivityResult event)?);
+    connectivity.onConnectivityChanged.listen(func as void Function(List<ConnectivityResult> event)?);
     //print(result.toString());
     return parseNetworkInfoResult(result);
   }
 
-  static Future<Map> parseNetworkInfoResult(ConnectivityResult result) async {
-    if (result == ConnectivityResult.ethernet) {
-      //print(result);
+  static Future<Map> parseNetworkInfoResult(List<ConnectivityResult> result) async {
+    //log(result[0],StackTrace.current);
+    if (result[0] == ConnectivityResult.ethernet) {
       //未连接wifi
       return {'type': 'ethernet', 'wifiName': "以太网"};
-    } else if (result == ConnectivityResult.wifi) {
+    } else if (result[0] == ConnectivityResult.wifi) {
       //已连接wifi
       String? wifiName = "已接入WiFi";
       try {
@@ -127,7 +128,7 @@ class DeviceInfoApi {
         wifiName = '无法获取wifiName';
       }
       return {'type': 'wifi', 'wifiName': wifiName};
-    } else if(result == ConnectivityResult.mobile){
+    } else if(result[0] == ConnectivityResult.mobile){
       return {'type': 'mobile', 'wifiName': "移动网络"};
     } else {
       return {'type': 'nowifi'};
@@ -162,14 +163,14 @@ class DeviceInfoApi {
       'type': build.type,
       'isPhysicalDevice': build.isPhysicalDevice,
       'systemFeatures': build.systemFeatures,
-      'displaySizeInches':
+      /* 'displaySizeInches':
           ((build.displayMetrics.sizeInches * 10).roundToDouble() / 10),
       'displayWidthPixels': build.displayMetrics.widthPx,
       'displayWidthInches': build.displayMetrics.widthInches,
       'displayHeightPixels': build.displayMetrics.heightPx,
       'displayHeightInches': build.displayMetrics.heightInches,
       'displayXDpi': build.displayMetrics.xDpi,
-      'displayYDpi': build.displayMetrics.yDpi,
+      'displayYDpi': build.displayMetrics.yDpi, */
       'serialNumber': build.serialNumber,
     };
   }

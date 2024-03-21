@@ -50,7 +50,7 @@ class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
   /// 监听网络类型的改变
   /// 改变ip和wifi接入情况
   /// ethernet wifi mobile none
-  Future<void> _listenConnectivityChanged(ConnectivityResult result) async {
+  Future<void> _listenConnectivityChanged(List<ConnectivityResult> result) async {
     Map result_ = await DeviceInfoApi.parseNetworkInfoResult(result);
     //log(result_, StackTrace.current);
     String networkText, lanIP, lanIPText;
