@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:bot_toast/bot_toast.dart';
 //import 'package:flutter/services.dart';
 
 import 'package:rabbit_clipboard/common/globalVariable.dart';
@@ -53,84 +54,64 @@ class _syncLogState extends State<syncLog> {
   }
 
 
-  //add
-  // void addDeviceItem(Map<String, dynamic> obj){
-  //   bool deviceExist = false;
-  //   for (int i = 0; i < syncLogData.length; i++) {
-  //     if (syncLogData[i]["lanIP"] == obj['lanIP']) {
-  //       syncLogData[i]["millTimeStamp"] = DateTime.now().millisecondsSinceEpoch;
-  //       deviceExist = true;
-  //       break;
-  //     }
-  //   }
-  //   //新设备加入
-  //   if (deviceExist == false) {
-  //     setState(() {
-  //       Map<String, dynamic> remoteDevice = {
-  //         "lanIP": obj["lanIP"],
-  //         "deviceType": obj["deviceType"],
-  //         "deviceName": obj["deviceName"],
-  //         "syncFlag": getSyncFlag(obj["lanIP"]),
-  //         "millTimeStamp": DateTime.now().millisecondsSinceEpoch
-  //       };
-  //       syncLogData.add(remoteDevice);
-  //     });
-  //     log(syncLogData, StackTrace.current);
-  //   }
-  // }
-
-  // //update
-  // void updateDeviceItem(int index,String key,dynamic value){
-  //   setState(() {
-  //     syncLogData[index][key] = value;
-  //   });
-  //   if(key == "syncFlag"){
-  //     //log(jsonEncode({"syncFlag":value}),StackTrace.current);
-  //     GlobalVariables.prefs!.setString(syncLogData[index]["lanIP"], jsonEncode({"syncFlag":value}));
-  //   }
-  // }
-
-
 
   Widget syncLogNotEmpty() {
-    return Expanded(child: 
-      Scrollbar(
-        child: 
-          ListView.separated(
-            controller: _scrollController,
-            padding: const EdgeInsets.all(5),
-            reverse: false,
-            separatorBuilder: (BuildContext context, int index) {
-              return const SizedBox(height: 5);
-            },
-            itemCount: syncLogData.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                  color: const Color.fromARGB(255, 255, 255, 255),
-                  child: ListTile(
-                      //dense:false,
-                      contentPadding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      //tileColor: const Color(0xffFF9E3D),
-                      //selectedTileColor:const Color(0xff1122dd),
-                      // leading:Icon(
-                      //   getRemoteDeviceTypeIcon(syncLogData[index]["deviceType"]),
-                      //   color: const Color.fromARGB(255, 126, 126, 126),
-                      // ),
-                      //iconColor: Color.fromARGB(255, 134, 134, 134),
-                      textColor: const Color.fromARGB(255, 126, 126, 126),
-                      //selectedColor:const Color(0xff1122dd),
-                      //focusColor:Color.fromARGB(255, 197, 30, 30),
-                      //hoverColor:Color.fromARGB(255, 185, 28, 216),
-                      //splashColor: Color.fromARGB(255, 62, 204, 44),
+    return 
+    Expanded(child: 
+      Column(children: [
+        Expanded(child: 
+          Scrollbar(
+          child: 
+            ListView.separated(
+              controller: _scrollController,
+              padding: const EdgeInsets.all(5),
+              reverse: false,
+              separatorBuilder: (BuildContext context, int index) {
+                return const SizedBox(height: 5);
+              },
+              itemCount: syncLogData.length,
+              itemBuilder: (BuildContext context, int index) {
+                return 
+                Container(
+                    color: const Color.fromARGB(255, 255, 255, 255),
+                    child: ListTile(
+                        //dense:false,
+                        contentPadding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        //tileColor: const Color(0xffFF9E3D),
+                        //selectedTileColor:const Color(0xff1122dd),
+                        // leading:Icon(
+                        //   getRemoteDeviceTypeIcon(syncLogData[index]["deviceType"]),
+                        //   color: const Color.fromARGB(255, 126, 126, 126),
+                        // ),
+                        //iconColor: Color.fromARGB(255, 134, 134, 134),
+                        textColor: const Color.fromARGB(255, 126, 126, 126),
+                        //selectedColor:const Color(0xff1122dd),
+                        //focusColor:Color.fromARGB(255, 197, 30, 30),
+                        //hoverColor:Color.fromARGB(255, 185, 28, 216),
+                        //splashColor: Color.fromARGB(255, 62, 204, 44),
 
-                      isThreeLine: false,
-                      title: Text(syncLogData[index]),
-                      //subtitle: Text("${syncLogData[index]["lanIP"]!}",style: const TextStyle(fontSize: 12.0,color: Color.fromARGB(255, 126, 126, 126))),      
-                    )
-              );
-            },
-          ))
-      );
+                        isThreeLine: false,
+                        title: Text(syncLogData[index]),
+                        //subtitle: Text("${syncLogData[index]["lanIP"]!}",style: const TextStyle(fontSize: 12.0,color: Color.fromARGB(255, 126, 126, 126))),      
+                      )
+                );
+              },
+            )
+            )
+        ),
+        const SizedBox(height: 10),
+        OutlinedButton(
+          child:const Text("清空记录"),
+          onPressed: () {
+            GlobalVariables.prefs!.remove("syncLog").then((_){
+              GlobalVariables.syncLogKey.currentState?.setState(() {});
+              BotToast.showText(text: "记录已清空");
+            });
+          }
+        ),
+        const SizedBox(height: 10)
+    ]))
+    ;
   }
 }
 

@@ -17,7 +17,10 @@ class Server {
     try {
       _server = await HttpServer.bind('0.0.0.0', GlobalVariables.httpServerPort);
     } catch (e) {
-      BotToast.showText(text: "启动Server失败");
+      //iOS 安装release版报错“启动失败 The shared flag to bind() needs to be true if binding multiple times on the same。。。“
+      //但实际上 http server已经启动
+      //BotToast.showText(text: "启动Server失败,$e",duration:const Duration(seconds: 10));
+      //log(e,StackTrace.current);
       return {'hasErr': true, 'type': 'server', 'errMsg': '$e'};
     }
 
@@ -47,7 +50,7 @@ class Server {
                     }
                     GlobalVariables.prefs!.setStringList("syncLog",syncLog).then((_){
                       //更新UI
-                      //log("gengxinui",StackTrace.current);
+                      //log("update ui",StackTrace.current);
                       GlobalVariables.syncLogKey.currentState?.setState(() {});
                       BotToast.showText(text: "收到剪切板消息");
                     });
