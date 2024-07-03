@@ -98,9 +98,8 @@ class DeviceInfoApi {
   static Future getNetworkInfo(Function func) async {
     //判断网络类型
     final Connectivity connectivity = Connectivity();
-    ConnectivityResult result = await connectivity.checkConnectivity();
-    //StreamSubscription<ConnectivityResult> connectivitySubscription =
-    connectivity.onConnectivityChanged.listen(func as void Function(ConnectivityResult event)?);
+    List<ConnectivityResult> result = await connectivity.checkConnectivity();
+    connectivity.onConnectivityChanged.listen(func as void Function(List<ConnectivityResult> event)?);
     //print(result.toString());
     return parseNetworkInfoResult(result as List<ConnectivityResult>);
   }
