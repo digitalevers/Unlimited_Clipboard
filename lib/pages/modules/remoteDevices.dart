@@ -1,17 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter/services.dart';
-import 'package:path/path.dart' as p;
 
 import 'package:rabbit_clipboard/common/func.dart';
 import 'package:rabbit_clipboard/common/globalVariable.dart';
-import 'package:rabbit_clipboard/services/clipBoardServices.dart';
-import 'package:rabbit_clipboard/services/server.dart';
-import 'package:rabbit_clipboard/services/udpServices.dart';
 
 //组件单独放在一个文件里则无法访问到 _RemoteDevicesState 该类为文件私有
 class RemoteDevices extends StatefulWidget {
@@ -296,7 +291,7 @@ class ArcPainter extends CustomPainter {
 
     double cx = size.width / 2;
     double cy = size.height / 2;
-    Paint _paint = Paint()
+    Paint paint = Paint()
       ..color = Colors.blue
       ..strokeWidth = 2
     //画笔是线段（默认是fill填充）
@@ -308,7 +303,7 @@ class ArcPainter extends CustomPainter {
     path.conicTo(originX + size.width, originY, originX + size.width, originY+ size.height, 100);
     // 控制路径是否闭合，可不写
     path.close();
-    canvas.drawPath(path, _paint);
+    canvas.drawPath(path, paint);
     canvas.save();
     canvas.restore();
 

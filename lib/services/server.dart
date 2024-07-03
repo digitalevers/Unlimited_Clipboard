@@ -5,7 +5,6 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_connect/http/src/request/request.dart';
 import 'package:path/path.dart' as p;
-import 'package:rabbit_clipboard/common/func.dart';
 import 'package:rabbit_clipboard/common/globalVariable.dart';
 import 'package:rabbit_clipboard/services/clipBoardServices.dart';
 

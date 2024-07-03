@@ -22,7 +22,7 @@ class _headerWidgetState extends State<headerWidget> {
   EdgeInsets paddingDiff() {
     if (Platform.isIOS || Platform.isAndroid) {
       //手机状态栏高度
-      double top = MediaQueryData.fromWindow(window).padding.top;
+      double top = MediaQueryData.fromView(window).padding.top;
       return EdgeInsets.fromLTRB(0, top, 0, 10);
     } else {
       return const EdgeInsets.fromLTRB(0, 10, 0, 10);

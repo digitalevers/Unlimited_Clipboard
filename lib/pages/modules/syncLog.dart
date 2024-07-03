@@ -1,9 +1,6 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter/services.dart';
-import 'package:path/path.dart' as p;
 
-import 'package:rabbit_clipboard/common/func.dart';
 import 'package:rabbit_clipboard/common/globalVariable.dart';
 
 //组件单独放在一个文件里则无法访问到 _syncLogState 该类为文件私有

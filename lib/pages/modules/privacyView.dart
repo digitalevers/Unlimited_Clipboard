@@ -24,7 +24,7 @@ class PrivacyView extends StatefulWidget {
 }
 
 class _PrivacyViewState extends State<PrivacyView> {
-  List<String> _list = [];
+  final List<String> _list = [];
 
   @override
   void initState() {
@@ -41,7 +41,7 @@ class _PrivacyViewState extends State<PrivacyView> {
             ..._list.map((e) {
               if (widget.keys.contains(e)) {
                 return TextSpan(
-                  text: '$e',
+                  text: e,
                   style: widget.keyStyle ??
                       TextStyle(color: Theme.of(context).primaryColor),
                   recognizer: TapGestureRecognizer()
@@ -50,7 +50,7 @@ class _PrivacyViewState extends State<PrivacyView> {
                     },
                 );
               } else {
-                return TextSpan(text: '$e', style: widget.style);
+                return TextSpan(text: e, style: widget.style);
               }
             }).toList()
           ]),
@@ -59,32 +59,32 @@ class _PrivacyViewState extends State<PrivacyView> {
 
   void _split() {
     int startIndex = 0;
-    Map<String, dynamic>? _index;
-    while ((_index = _nextIndex(startIndex)) != null) {
-      int i = _index?['index'];
+    Map<String, dynamic>? index;
+    while ((index = _nextIndex(startIndex)) != null) {
+      int i = index?['index'];
       String sub = widget.data.substring(startIndex, i);
       if (sub.isNotEmpty) {
         _list.add(sub);
       }
-      _list.add(_index?['key']);
+      _list.add(index?['key']);
 
-      startIndex = i + (_index?['key'] as String).length;
+      startIndex = i + (index?['key'] as String).length;
     }
   }
 
   Map<String, dynamic>? _nextIndex(int startIndex) {
     int currentIndex = widget.data.length;
     String? key;
-    widget.keys.forEach((element) {
+    for (var element in widget.keys) {
       int index = widget.data.indexOf(element, startIndex);
       if (index != -1 && index < currentIndex) {
         currentIndex = index;
         key = element;
       }
-    });
+    }
     if (key == null) {
       return null;
     }
-    return {'key': '$key', 'index': currentIndex};
+    return {'key': key, 'index': currentIndex};
   }
 }

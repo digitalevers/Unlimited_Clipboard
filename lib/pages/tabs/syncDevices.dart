@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:rabbit_clipboard/common/func.dart';
 import 'package:rabbit_clipboard/common/globalVariable.dart';
 import 'package:rabbit_clipboard/common/globalWidget.dart';
 import 'package:rabbit_clipboard/pages/modules/remoteDevices.dart';

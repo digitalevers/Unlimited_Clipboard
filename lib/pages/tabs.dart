@@ -1,10 +1,8 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:rabbit_clipboard/common/commclass.dart';
-import 'package:rabbit_clipboard/common/func.dart';
 import 'package:rabbit_clipboard/services/clipBoardServices.dart';
 import 'package:rabbit_clipboard/services/server.dart';
 

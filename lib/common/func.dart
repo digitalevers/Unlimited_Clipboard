@@ -2,7 +2,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
-import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
 import 'package:rabbit_clipboard/common/customIcons.dart';
 
@@ -11,7 +10,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'globalVariable.dart';
-import 'package:bot_toast/bot_toast.dart';
 
 
 // ignore: slash_for_doc_comments
@@ -105,7 +103,7 @@ Future<int> syncClipBoard(HttpClient client_, String serverIP_, int serverPort_,
     int result = int.parse(await response.transform(utf8.decoder).join());
     //result 1 同步成功 0 同步失败
     return result;
-  } catch(error,stack){
+  } catch(error){
     log(error,StackTrace.current);
     return 0;
   }
