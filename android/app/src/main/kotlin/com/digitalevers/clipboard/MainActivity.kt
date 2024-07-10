@@ -1,4 +1,4 @@
-package com.example.unlimited_clipboard
+package com.digitalevers.clipboard
 
 import io.flutter.embedding.android.FlutterActivity
 
