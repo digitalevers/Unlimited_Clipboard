@@ -10,6 +10,7 @@ import 'package:rabbit_clipboard/common/globalVariable.dart';
 //import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 import 'package:rabbit_clipboard/pages/modules/privacyView.dart';
 
+//首页隐私政策弹窗
 class PrivacyPage extends StatefulWidget {
 
   const PrivacyPage({super.key});

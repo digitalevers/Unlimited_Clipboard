@@ -8,6 +8,7 @@ import 'package:rabbit_clipboard/services/server.dart';
 
 import 'tabs/syncDevices.dart';
 import 'tabs/syncHistory.dart';
+import 'tabs/aboutInfo.dart';
 
 import 'package:rabbit_clipboard/pages/modules/privacyPage.dart';
 import 'package:rabbit_clipboard/common/globalVariable.dart';
@@ -30,6 +31,7 @@ class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
   final List<Widget> _pages = [
     const SyncDevices(),
     const SyncHistory(),
+    const AboutInfo(),
   ];
 
   //新手引导蒙层
@@ -128,6 +130,7 @@ class _nameState extends State<Tabs> with SingleTickerProviderStateMixin {
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(icon: Icon(Icons.devices), label: "同步设备"),
             BottomNavigationBarItem(icon: Icon(Icons.list), label: "同步历史"),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: "隐私政策"),
           ],
         ),
         //新手引导蒙层只在app安装时提示一次
