@@ -108,7 +108,7 @@ class DeviceInfoApi {
     List<ConnectivityResult> result = await connectivity.checkConnectivity();
     connectivity.onConnectivityChanged.listen(func as void Function(List<ConnectivityResult> event)?);
     //print(result.toString());
-    return parseNetworkInfoResult(result as List<ConnectivityResult>);
+    return parseNetworkInfoResult(result);
   }
 
   static Future<Map> parseNetworkInfoResult(List<ConnectivityResult> result) async {

@@ -69,8 +69,8 @@ class _AboutInfoState extends State<AboutInfo> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.info),
-            title: Text('联系我们'),
+            leading: const Icon(Icons.info),
+            title: const Text('联系我们'),
             onTap: () {
               // 处理点击事件，例如显示关于页面
               Navigator.push(
